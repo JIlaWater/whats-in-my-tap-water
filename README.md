@@ -111,6 +111,14 @@ Use these as the initial discovery/verification set only. Do not scrape, do not 
 - No PFAS value should become publishable without explicit human review.
 - Do not scrape or auto-publish PFAS values from HTML pages.
 
+
+### Using official Excel/XLSX source files
+- Some official water-quality sources may be published as downloadable Excel workbooks (`.xlsx`) instead of PDFs or HTML tables.
+- XLSX sources can be used only when source owner, file name, source URL, publication/report date, last checked date, and reviewer notes are recorded in the workflow artifacts.
+- Spreadsheet values must be manually reviewed cell-by-cell before any record moves beyond `review_status=imported`.
+- Do not auto-publish Excel-derived values.
+- Do not scrape external sources automatically.
+
 ### Safe import workflow
 1. Keep sample values in app data until source records validate.
 2. Populate source templates with official URLs and dates first.

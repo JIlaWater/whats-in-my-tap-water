@@ -15,6 +15,22 @@ Use this capture pack to log official sources before entering any water quality 
 - reviewer initials:
 - notes:
 
+
+## Seqwater Weekly Taste and Odour Results
+- official source URL:
+- report/download title:
+- source owner: Seqwater
+- source type: downloadable_xlsx
+- file name:
+- publication/report date:
+- last checked date:
+- available parameters:
+- geographic coverage:
+- update cadence: weekly (if confirmed by source)
+- confidence level:
+- reviewer initials:
+- notes:
+
 ## Urban Utilities
 - official source URL:
 - report/document title:
