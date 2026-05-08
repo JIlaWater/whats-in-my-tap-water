@@ -23,6 +23,42 @@ Populate the blank reviewer/date/notes fields during manual QA.
 
 ---
 
+
+## Source type handling
+
+Use the following source-type rules when recording official Brisbane/SEQ references.
+
+### `downloadable_pdf`
+- **source_url:** Record the direct PDF file URL when possible. If only a landing page is available, record the landing page URL and include the PDF filename in notes.
+- **publication date:** Record the publication date printed on the PDF (or the release date shown on the official page if the PDF has no explicit date).
+- **last_checked_date:** Record the date the reviewer last opened the source and confirmed it is still the current official version.
+- **downloadable:** Set as `yes` because the source artifact is a downloadable file.
+- **manual entry notes:** Note the report title/version, zone context, and any table-to-field mapping decisions used during entry.
+
+### `official_html_page`
+- **source_url:** Record the canonical official HTML page URL (for example, the Seqwater PFAS page) that contains the table.
+- **publication date:** Record the date shown on-page for the relevant update/table section; if no explicit publication date exists, capture the page update wording in notes and leave publication handling to QA policy.
+- **last_checked_date:** Record the exact date the reviewer last loaded the page and verified that the table content/structure had not changed unexpectedly.
+- **downloadable:** Set as `no` when no clean downloadable report is available for the needed table data.
+- **manual entry notes:** Document the exact table section used, source owner, reviewer initials, and any interpretation limits.
+- **Why manual review is required:** HTML tables can change structure, labels, or context without a versioned file trail. Every extracted value must be manually reviewed before use to avoid mis-mapped or stale data.
+
+### `annual_report_pdf`
+- **source_url:** Record the direct annual report PDF URL (or the official landing page + file title when direct links are temporary).
+- **publication date:** Record the annual report issue/publication date shown in the document.
+- **last_checked_date:** Record the reviewer check date used to confirm the annual version is still current.
+- **downloadable:** Set as `yes`.
+- **manual entry notes:** Note section/page references and whether values are annual summaries rather than monthly measurements.
+
+### `guidance_page`
+- **source_url:** Record the official guidance/advisory page URL from the responsible authority.
+- **publication date:** Record the official page update/publication date shown by the publisher.
+- **last_checked_date:** Record when the reviewer last verified the guidance remained current.
+- **downloadable:** Set as `no` unless the guidance page includes the exact downloadable document used.
+- **manual entry notes:** Capture how the guidance is being used (context only vs row-level evidence) and any restrictions on numeric extraction.
+
+---
+
 ## Completion criteria for first 5–10 records
 Before moving any row beyond `imported`, ensure each selected source entry above has:
 1. A valid source URL.

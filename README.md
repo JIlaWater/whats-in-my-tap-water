@@ -104,6 +104,13 @@ Reviewers should start with this official link set before adding any non-sample 
 
 Use these as the initial discovery/verification set only. Do not scrape, do not publish directly from source pages, and keep all first-pass rows in `review_status=imported` pending human QA.
 
+
+### Using official HTML sources where downloads are unavailable
+- PFAS data may be published on official source pages as HTML tables rather than downloadable PDFs.
+- HTML-table data may only be used when the source URL, last checked date, source owner, and manual review notes are recorded in the workflow assets.
+- No PFAS value should become publishable without explicit human review.
+- Do not scrape or auto-publish PFAS values from HTML pages.
+
 ### Safe import workflow
 1. Keep sample values in app data until source records validate.
 2. Populate source templates with official URLs and dates first.
