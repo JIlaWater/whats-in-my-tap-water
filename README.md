@@ -107,3 +107,28 @@ Review status values are controlled and must be one of:
 - Keep beta warnings visible in UI.
 - Do not publish real-looking values without URL, publication date, and confidence level.
 - Keep Jila CTA logic Brisbane/SEQ-only.
+## Running the Brisbane/SEQ import preview
+
+The Brisbane/SEQ import runner (`scripts/import-brisbane-seq.ts`) performs an offline preview import from source-backed CSV template data and validates records before any publication stage. It is intended to help reviewers inspect import output safely while the app remains in sample/beta mode.
+
+Run the preview import with:
+
+```bash
+npm run import:brisbane-seq
+```
+
+The generated staging preview JSON is written to:
+
+- `data/staging/brisbane-seq-import.preview.json`
+
+### Interpreting import output
+- `report.hasErrors` indicates whether the import encountered validation or processing errors that require review/fix before records can move forward.
+- `importFlags` indicate non-fatal conditions and review markers attached to imported rows (for example, records needing closer human QA even when parsing succeeds).
+
+### Publication safety
+- Imported records are **not** published automatically because import completion is only one step in the controlled workflow.
+- Human review is required before anything can be promoted to `publishable` or `published` status.
+
+### Warning
+This command does **not** scrape live data, does **not** publish records, and must only be used with source-backed CSV data.
+
