@@ -141,7 +141,7 @@ export const App = () => {
             <p className="betaNote">Beta preview: all suburb metrics, confidence, and freshness values remain sample placeholders.</p>
           </div>
           <figure className="heroMascot">
-            <img src="https://jilawater.com.au/wp-content/uploads/2026/05/kangaroo-water-mascot.webp" alt="Friendly Australian kangaroo mascot drinking a glass of water with the Australian flag draped over its shoulders." loading="eager" decoding="async" />
+            <img src="/images/kangaroo-water-mascot.webp" alt="Friendly Australian kangaroo mascot drinking a glass of water with the Australian flag draped over its shoulders." loading="eager" decoding="async" />
           </figure>
         </div>
       </header>
