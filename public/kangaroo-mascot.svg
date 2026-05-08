@@ -1,0 +1,32 @@
+<svg width="920" height="920" viewBox="0 0 920 920" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Australian kangaroo mascot drinking water</title>
+  <desc id="desc">A premium illustration of a kangaroo drinking clean water with an Australian flag draped over its shoulders.</desc>
+  <defs>
+    <linearGradient id="bg" x1="110" y1="120" x2="760" y2="820" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E0F2FE"/>
+      <stop offset="1" stop-color="#FFF7ED"/>
+    </linearGradient>
+  </defs>
+  <rect x="38" y="38" width="844" height="844" rx="220" fill="url(#bg)"/>
+  <path d="M652 293C627 236 553 198 491 212C426 226 385 277 375 332C360 418 409 500 489 525C568 549 656 504 674 434C685 392 673 340 652 293Z" fill="#A16207"/>
+  <path d="M530 272L578 184C591 161 577 132 552 129L516 126C493 124 474 145 478 168L493 262L530 272Z" fill="#92400E"/>
+  <path d="M460 289L422 206C411 181 381 173 361 189L335 211C316 227 320 257 344 269L430 313L460 289Z" fill="#78350F"/>
+  <ellipse cx="509" cy="367" rx="125" ry="138" fill="#B45309"/>
+  <ellipse cx="548" cy="360" rx="20" ry="23" fill="#111827"/>
+  <circle cx="541" cy="353" r="7" fill="#F8FAFC"/>
+  <path d="M602 398C581 425 543 441 505 441C467 441 432 427 413 403C428 388 450 378 475 375C513 370 556 374 602 398Z" fill="#FDE68A"/>
+  <path d="M370 493C382 603 472 696 584 706" stroke="#92400E" stroke-width="34" stroke-linecap="round"/>
+  <path d="M410 452C385 492 352 550 328 620" stroke="#78350F" stroke-width="36" stroke-linecap="round"/>
+  <path d="M588 467C612 522 622 565 622 621" stroke="#78350F" stroke-width="36" stroke-linecap="round"/>
+  <path d="M300 478C401 436 513 423 617 444L628 520C517 497 411 511 312 558L300 478Z" fill="#1D4ED8"/>
+  <path d="M366 457L403 546" stroke="#F8FAFC" stroke-width="18"/>
+  <path d="M456 438L492 528" stroke="#F8FAFC" stroke-width="18"/>
+  <path d="M546 441L584 530" stroke="#F8FAFC" stroke-width="18"/>
+  <path d="M309 536L622 485" stroke="#F8FAFC" stroke-width="20"/>
+  <path d="M470 473L480 507L515 507L487 526L498 560L470 541L442 560L453 526L425 507L460 507L470 473Z" fill="#F8FAFC"/>
+  <path d="M395 540C447 572 520 586 582 582" stroke="#1E3A8A" stroke-width="10" stroke-linecap="round"/>
+  <rect x="403" y="412" width="222" height="66" rx="33" fill="#C2410C"/>
+  <path d="M624 447C675 453 706 478 709 527C668 517 642 501 625 469L624 447Z" fill="#FB923C"/>
+  <ellipse cx="722" cy="528" rx="49" ry="56" fill="#F8FAFC"/>
+  <path d="M690 535C708 549 734 557 755 549" stroke="#CBD5E1" stroke-width="6" stroke-linecap="round"/>
+</svg>

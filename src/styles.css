@@ -36,6 +36,32 @@ body { margin: 0; }
   background: linear-gradient(145deg, #ffffff 20%, #eff6ff 100%);
 }
 
+.heroContent {
+  display: grid;
+  gap: 1rem;
+  align-items: center;
+}
+
+.heroCopy {
+  position: relative;
+  z-index: 2;
+}
+
+.heroMascot {
+  margin: 0;
+  justify-self: center;
+  width: min(100%, 340px);
+}
+
+.heroMascot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 14px 28px #0f172a1f;
+}
+
 .hero h1 {
   margin: 0 0 0.6rem;
   font-size: clamp(1.8rem, 4.5vw, 2.6rem);
@@ -115,4 +141,11 @@ button {
 @media (min-width: 700px) {
   .layout { padding-top: 1.5rem; }
   .card { padding: 1.35rem; }
+  .heroContent {
+    grid-template-columns: 1.25fr minmax(240px, 0.75fr);
+    gap: 1.4rem;
+  }
+  .heroMascot {
+    justify-self: end;
+  }
 }
