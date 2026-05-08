@@ -3,6 +3,7 @@ import type { CoverageLevel, ImportValidationIssue, ReviewStatus, SourceReferenc
 const requiredCoverageLevels: CoverageLevel[] = ['suburb', 'postcode', 'supply_zone', 'authority', 'council', 'state'];
 const validStatuses: ReviewStatus[] = ['sample', 'imported', 'reviewed', 'publishable', 'published'];
 const validCoverageSet = new Set(requiredCoverageLevels);
+const validStatusSet = new Set(validStatuses);
 
 export const parseCsv = (raw: string): Record<string, string>[] => {
   const lines = raw.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
@@ -21,28 +22,65 @@ export const parseCsv = (raw: string): Record<string, string>[] => {
 
 const isIsoDate = (value: string) => /^\d{4}-\d{2}-\d{2}$/.test(value);
 
-export const validateSourceReferenceRecord = (record: Partial<SourceReferenceRecord>, rowNumber: number): ImportValidationIssue[] => {
+const addRequiredField = (
+  value: string | undefined,
+  issues: ImportValidationIssue[],
+  rowNumber: number,
+  field: string,
+  message: string,
+) => {
+  if (!value) issues.push({ rowNumber, field, message });
+};
+
+const validateSharedSourceFields = (record: Record<string, string>, rowNumber: number): ImportValidationIssue[] => {
   const issues: ImportValidationIssue[] = [];
 
-  if (!record.sourceUrl) issues.push({ rowNumber, field: 'sourceUrl', message: 'source URL is required.' });
-  if (!record.publicationDate) issues.push({ rowNumber, field: 'publicationDate', message: 'publication date is required.' });
-  if (!record.lastCheckedDate) issues.push({ rowNumber, field: 'lastCheckedDate', message: 'last checked date is required.' });
-  if (!record.confidenceLevel) issues.push({ rowNumber, field: 'confidenceLevel', message: 'confidence level is required.' });
-  if (!record.coverageLevel) issues.push({ rowNumber, field: 'coverageLevel', message: 'coverage level is required.' });
+  addRequiredField(record.source_url, issues, rowNumber, 'source_url', 'source URL is required.');
+  addRequiredField(record.publication_date, issues, rowNumber, 'publication_date', 'publication date is required.');
+  addRequiredField(record.last_checked_date, issues, rowNumber, 'last_checked_date', 'last checked date is required.');
+  addRequiredField(record.confidence_level, issues, rowNumber, 'confidence_level', 'confidence level is required.');
+  addRequiredField(record.coverage_level, issues, rowNumber, 'coverage_level', 'coverage level is required.');
 
-  if (record.publicationDate && !isIsoDate(record.publicationDate)) {
-    issues.push({ rowNumber, field: 'publicationDate', message: 'publication date must use YYYY-MM-DD format.' });
+  if (record.publication_date && !isIsoDate(record.publication_date)) {
+    issues.push({ rowNumber, field: 'publication_date', message: 'publication date must use YYYY-MM-DD format.' });
   }
-  if (record.lastCheckedDate && !isIsoDate(record.lastCheckedDate)) {
-    issues.push({ rowNumber, field: 'lastCheckedDate', message: 'last checked date must use YYYY-MM-DD format.' });
-  }
-
-  if (record.coverageLevel && !validCoverageSet.has(record.coverageLevel)) {
-    issues.push({ rowNumber, field: 'coverageLevel', message: `coverage level must be one of: ${requiredCoverageLevels.join(', ')}.` });
+  if (record.last_checked_date && !isIsoDate(record.last_checked_date)) {
+    issues.push({ rowNumber, field: 'last_checked_date', message: 'last checked date must use YYYY-MM-DD format.' });
   }
 
-  if (record.reviewStatus && !validStatuses.includes(record.reviewStatus)) {
-    issues.push({ rowNumber, field: 'reviewStatus', message: `review status must be one of: ${validStatuses.join(', ')}.` });
+  if (record.coverage_level && !validCoverageSet.has(record.coverage_level as CoverageLevel)) {
+    issues.push({ rowNumber, field: 'coverage_level', message: `coverage level must be one of: ${requiredCoverageLevels.join(', ')}.` });
+  }
+
+  if (record.review_status && !validStatusSet.has(record.review_status as ReviewStatus)) {
+    issues.push({ rowNumber, field: 'review_status', message: `review status must be one of: ${validStatuses.join(', ')}.` });
+  }
+
+  if ((record.review_status === 'publishable' || record.review_status === 'published') && record.confidence_level === 'low') {
+    issues.push({ rowNumber, field: 'confidence_level', message: 'publishable/published rows must not use low confidence.' });
+  }
+
+  return issues;
+};
+
+export const validateSourceReferenceRecord = (record: Partial<SourceReferenceRecord>, rowNumber: number): ImportValidationIssue[] =>
+  validateSharedSourceFields(
+    {
+      source_url: record.sourceUrl ?? '',
+      publication_date: record.publicationDate ?? '',
+      last_checked_date: record.lastCheckedDate ?? '',
+      confidence_level: record.confidenceLevel ?? '',
+      coverage_level: record.coverageLevel ?? '',
+      review_status: record.reviewStatus ?? '',
+    },
+    rowNumber,
+  );
+
+export const validateWaterQualityParameterRow = (record: Record<string, string>, rowNumber: number): ImportValidationIssue[] => {
+  const issues = validateSharedSourceFields(record, rowNumber);
+
+  if ((record.review_status === 'publishable' || record.review_status === 'published') && !record.value_numeric) {
+    issues.push({ rowNumber, field: 'value_numeric', message: 'publishable/published rows require a numeric value.' });
   }
 
   return issues;
