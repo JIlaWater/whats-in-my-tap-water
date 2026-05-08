@@ -50,7 +50,7 @@ body { margin: 0; }
 .heroMascot {
   margin: 0;
   justify-self: center;
-  width: min(100%, 340px);
+  width: min(72vw, 260px);
 }
 
 .heroMascot img {
@@ -142,10 +142,11 @@ button {
   .layout { padding-top: 1.5rem; }
   .card { padding: 1.35rem; }
   .heroContent {
-    grid-template-columns: 1.25fr minmax(240px, 0.75fr);
+    grid-template-columns: 1.25fr minmax(220px, 0.7fr);
     gap: 1.4rem;
   }
   .heroMascot {
     justify-self: end;
+    width: min(100%, 300px);
   }
 }
