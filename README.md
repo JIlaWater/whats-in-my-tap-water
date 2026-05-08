@@ -164,3 +164,16 @@ Rules enforced by process:
 
 ### Example row policy
 Example rows in review templates are placeholders for Brisbane/SEQ QA workflow demonstration only. They are not official water values and must not be auto-published.
+
+## Validating reviewed water data before publishing
+
+Run automated validation for Brisbane/SEQ QA review CSVs before any publish workflow step:
+
+```bash
+npm run validate:review-records
+```
+
+- **PASS** means the reviewed and rejected record templates passed lifecycle and field-level checks (required fields, date format, URL format, status constraints, and confidence gating).
+- **FAIL** means one or more rows violate required validation rules. The report prints exact row numbers, field names, and issues so QA can fix them before attempting publication.
+- **Human review is still required** because this script only enforces structural and lifecycle policy rules; it does not verify scientific correctness, source interpretation quality, or editorial judgement.
+- **This script does not publish data**. It only validates local CSV review records and exits with success/failure status for CI or manual gating.
