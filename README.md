@@ -177,3 +177,18 @@ npm run validate:review-records
 - **FAIL** means one or more rows violate required validation rules. The report prints exact row numbers, field names, and issues so QA can fix them before attempting publication.
 - **Human review is still required** because this script only enforces structural and lifecycle policy rules; it does not verify scientific correctness, source interpretation quality, or editorial judgement.
 - **This script does not publish data**. It only validates local CSV review records and exits with success/failure status for CI or manual gating.
+
+## CI safety checks
+
+GitHub Actions CI runs on every pull request and on pushes to `main` as a safety gate.
+
+It validates:
+- app build health (`npm run lint` and `npm run build`)
+- Brisbane/SEQ import preview checks (`npm run import:brisbane-seq`)
+- human-reviewed record checks (`npm run validate:review-records`)
+
+CI guardrails:
+- does not publish or deploy data
+- does not scrape live data
+- does not modify production data
+- does not replace human review
