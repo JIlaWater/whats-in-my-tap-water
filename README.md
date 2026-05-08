@@ -93,6 +93,17 @@ Review status values are controlled and must be one of:
 - Queensland Health guidance
 - Council/source notes where needed
 
+### Official starting links for first manual Brisbane/SEQ source-backed records
+Reviewers should start with this official link set before adding any non-sample source metadata:
+- Seqwater Water Quality Report: https://www.seqwater.com.au/water-quality-report
+- Seqwater Water Quality hub: https://www.seqwater.com.au/water-quality
+- Seqwater PFAS and drinking water: https://www.seqwater.com.au/pfas-and-drinking-water
+- Seqwater Taste and Odour: https://www.seqwater.com.au/taste-and-odour
+- Unitywater Water Quality Testing and Reports: https://www.unitywater.com/about-us/our-business/water-quality/water-quality-testing-and-reports
+- Queensland Health Drinking Water guidance: https://www.health.qld.gov.au/public-health/industry-environment/environment-land-water/water/quality/drinking
+
+Use these as the initial discovery/verification set only. Do not scrape, do not publish directly from source pages, and keep all first-pass rows in `review_status=imported` pending human QA.
+
 ### Safe import workflow
 1. Keep sample values in app data until source records validate.
 2. Populate source templates with official URLs and dates first.
@@ -198,7 +209,7 @@ CI guardrails:
 Use this workflow to manually create the first 5–10 source-backed Brisbane/SEQ records without scraping, auto-publishing, or changing beta/sample UI behavior.
 
 ### 1) Record sources first
-- Complete `data/sources/brisbane-seq-source-checklist.md` for Seqwater, Urban Utilities, Unitywater, Queensland Health, and any relevant council source notes.
+- Complete `data/sources/brisbane-seq-source-checklist.md` using the official starting links listed above (Seqwater, Unitywater, Queensland Health, and any relevant council source notes).
 - Capture source URL, owner, publication date, last checked date, coverage level, parameters, cadence, confidence, notes, reviewer initials, and review date before entering water records.
 
 ### 2) Update CSV templates manually
@@ -245,7 +256,7 @@ Records must not become `publishable` until source, confidence, coverage, and re
 Use this manual workflow to collect the first 5–10 official Brisbane/SEQ records safely.
 
 ### 1) Collect official source data manually
-1. Start with `data/sources/official-source-links.md`.
+1. Start with `data/sources/brisbane-seq-source-checklist.md` and the official starting links in this README.
 2. For Seqwater, Urban Utilities, Unitywater, Queensland Health, and council/source notes, fill in:
    - official source URL
    - report/document title
