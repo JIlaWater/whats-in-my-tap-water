@@ -57,6 +57,33 @@ Use the following source-type rules when recording official Brisbane/SEQ referen
 - **downloadable:** Set as `no` unless the guidance page includes the exact downloadable document used.
 - **manual entry notes:** Capture how the guidance is being used (context only vs row-level evidence) and any restrictions on numeric extraction.
 
+
+
+### Seqwater Weekly Taste and Odour Results (`downloadable_xlsx`)
+Use this section when the official weekly taste/odour source is provided as an Excel workbook (for example `seqwater_taste_odour_results_day_20260508.xlsx`).
+
+| Field | Value to capture |
+|---|---|
+| source owner | Seqwater |
+| source type | downloadable_xlsx |
+| file name |  |
+| source URL |  |
+| report/download title |  |
+| publication date or report date |  |
+| last checked date |  |
+| geographic coverage |  |
+| available parameters |  |
+| update cadence | weekly (if confirmed by source) |
+| confidence considerations |  |
+| reviewer initials |  |
+| review date |  |
+| notes |  |
+
+**Manual safety requirements for XLSX sources**
+- Record the exact workbook filename and URL before using any values.
+- Keep all imported rows in `review_status=imported` until spreadsheet cells are manually reviewed.
+- Do not auto-publish Excel-derived values.
+- Do not scrape or auto-ingest external spreadsheet links.
 ---
 
 ## Completion criteria for first 5–10 records
