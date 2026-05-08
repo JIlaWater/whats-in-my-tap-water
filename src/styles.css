@@ -3,67 +3,29 @@
   color: #0f172a;
   background: #f8fafc;
 }
+body { margin: 0; }
+.layout { max-width: 880px; margin: 0 auto; padding: 1rem 0.9rem 3rem; }
+.top h1 { margin-bottom: 0.3rem; font-size: 1.6rem; }
+.banner { background: #fff4d6; border: 1px solid #f5c451; padding: 0.7rem; border-radius: 0.6rem; }
+.card { background: #fff; border: 1px solid #dbe2ea; border-radius: 0.8rem; padding: 1rem; margin-top: 0.9rem; box-shadow: 0 1px 2px #0000000a; }
+.snapshot { border: 2px solid #0ea5e9; }
+.kicker { text-transform: uppercase; letter-spacing: .05em; color: #0369a1; font-size: .75rem; font-weight: 700; }
+.searchPanel input { width: 100%; box-sizing: border-box; padding: 0.7rem; border-radius: .5rem; border: 1px solid #b9c8d6; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+button { border: 1px solid #b8c5d3; background: #fff; border-radius: 999px; padding: 0.45rem 0.75rem; font-size: .9rem; cursor: pointer; }
+button:disabled { opacity: .55; cursor: not-allowed; }
+.actions { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
+.badges { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: .6rem; }
+.badge { background: #ecfeff; color: #155e75; border-radius: 999px; padding: .25rem .6rem; font-size: .78rem; border: 1px solid #a5f3fc; }
+.badge.warn { background: #ffedd5; border-color: #fed7aa; color: #9a3412; }
+.cta { display: inline-block; color: #fff; text-decoration: none; background: #0369a1; padding: .55rem .85rem; border-radius: .5rem; }
+.ctaCard.neutral { border-style: dashed; }
+.muted { color: #64748b; }
+.faq h4 { margin-bottom: .3rem; }
+.faq p { margin-top: 0; }
 
-body {
-  margin: 0;
-}
-
-.layout {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 2rem 1rem 4rem;
-}
-
-.banner {
-  background: #e2e8f0;
-  border-left: 4px solid #0369a1;
-  padding: 0.75rem 1rem;
-  border-radius: 0.4rem;
-}
-
-.searchPanel {
-  margin: 1rem 0;
-}
-
-input {
-  width: min(100%, 460px);
-  padding: 0.6rem;
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.6rem;
-}
-
-.chips button {
-  border: 1px solid #94a3b8;
-  background: #fff;
-  border-radius: 999px;
-  padding: 0.3rem 0.7rem;
-  cursor: pointer;
-}
-
-.card {
-  background: white;
-  border: 1px solid #cbd5e1;
-  border-radius: 0.6rem;
-  padding: 1rem;
-}
-
-.note,
-.muted {
-  color: #475569;
-  font-size: 0.9rem;
-}
-
-.cta {
-  display: inline-block;
-  margin-top: 0.5rem;
-  color: white;
-  text-decoration: none;
-  background: #0369a1;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.4rem;
+@media (min-width: 700px) {
+  .layout { padding-top: 1.5rem; }
+  .top h1 { font-size: 2rem; }
+  .actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

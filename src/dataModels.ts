@@ -6,7 +6,7 @@ export type AustralianSuburb = {
   state: 'QLD';
   postcode: string;
   lga: string;
-  region: 'Brisbane' | 'SEQ';
+  region: 'Brisbane' | 'SEQ' | 'Regional';
   dataLabel: DataLabel;
 };
 

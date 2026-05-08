@@ -30,6 +30,7 @@ export const suburbs: AustralianSuburb[] = [
   { id: 'au-qld-north-lakes-4509', suburb: 'North Lakes', state: 'QLD', postcode: '4509', lga: 'Moreton Bay', region: 'SEQ', dataLabel: SAMPLE },
   { id: 'au-qld-maroochydore-4558', suburb: 'Maroochydore', state: 'QLD', postcode: '4558', lga: 'Sunshine Coast', region: 'SEQ', dataLabel: SAMPLE },
   { id: 'au-qld-caloundra-4551', suburb: 'Caloundra', state: 'QLD', postcode: '4551', lga: 'Sunshine Coast', region: 'SEQ', dataLabel: SAMPLE },
+  { id: 'au-qld-toowoomba-4350', suburb: 'Toowoomba', state: 'QLD', postcode: '4350', lga: 'Toowoomba Region', region: 'Regional', dataLabel: SAMPLE },
 ];
 
 export const authorities: WaterAuthority[] = [
