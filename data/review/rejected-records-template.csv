@@ -1,0 +1,2 @@
+record_id,region,suburb,postcode,parameter_name,value,unit,coverage_level,confidence_level,source_url,publication_date,last_checked_date,reviewer_name,review_date,original_status,rejection_reason,rejection_notes
+example-bris-seq-rej-001,Brisbane/SEQ,Example Suburb,4001,pH,7.1,pH,suburb,low,,2026-01-15,2026-05-08,AB,2026-05-08,imported,Missing source URL and low confidence,Placeholder rejected example row for QA template only.

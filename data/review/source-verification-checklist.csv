@@ -1,0 +1,2 @@
+record_id,source_url_checked,publication_date_checked,last_checked_date,source_owner,parameter_name,value_checked,unit_checked,coverage_level_confirmed,confidence_level_confirmed,reviewer_name_or_initials,review_date,reviewer_notes
+example-bris-seq-001,yes,yes,2026-05-08,Example Source Owner,fluoride,yes,yes,suburb,medium,AB,2026-05-08,Placeholder verification example for Brisbane/SEQ workflow.
