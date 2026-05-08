@@ -96,9 +96,10 @@ Review status values are controlled and must be one of:
 ### Safe import workflow
 1. Keep sample values in app data until source records validate.
 2. Populate source templates with official URLs and dates first.
-3. Parse + validate CSV rows using `src/dataImport/csvImport.ts`.
+3. Parse + validate CSV rows using `src/dataImport/csvImport.ts` (`parseCsv`, `validateSourceReferenceRecord`, and `validateWaterQualityParameterRow`).
 4. Move records through status: `sample` -> `imported` -> `reviewed` -> `publishable` -> `published`.
-5. Only publish non-sample values after validation and review are complete.
+5. `publishable`/`published` rows must include source metadata and cannot use low confidence.
+6. Only publish non-sample values after validation and review are complete.
 
 ### Important guardrails
 - Do not scrape live data directly in this stage.
