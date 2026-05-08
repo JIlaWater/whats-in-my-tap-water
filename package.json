@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "import:brisbane-seq": "tsx scripts/import-brisbane-seq.ts"
+    "import:brisbane-seq": "tsx scripts/import-brisbane-seq.ts",
+    "validate:review-records": "tsx scripts/validate-review-records.ts"
   },
   "dependencies": {
     "react": "^18.3.1",
