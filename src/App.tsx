@@ -2,23 +2,46 @@ import { useEffect, useMemo, useState } from 'react';
 import { authorities, reports, suburbMappings, suburbs, supplyZones } from './seedData';
 
 const SAMPLE_LABEL = 'SAMPLE / PLACEHOLDER DATA ONLY';
+const SITE_NAME = 'WhatsInMyTapWater.com';
 
 const slugFor = (suburbId: string) => suburbId;
 
-const getRouteSuburbId = () => {
+type Route =
+  | { type: 'home' }
+  | { type: 'report'; suburbId: string }
+  | { type: 'privacy' }
+  | { type: 'methodology' }
+  | { type: 'notFound' };
+
+const getRoute = (): Route => {
   const parts = window.location.pathname.split('/').filter(Boolean);
-  if (parts[0] === 'report' && parts[1]) return parts[1];
-  return null;
+  if (parts.length === 0) return { type: 'home' };
+  if (parts[0] === 'report' && parts[1]) return { type: 'report', suburbId: parts[1] };
+  if (parts[0] === 'privacy') return { type: 'privacy' };
+  if (parts[0] === 'methodology') return { type: 'methodology' };
+  return { type: 'notFound' };
 };
 
 const isBrisbaneOrSeq = (region: string): boolean => ['brisbane', 'seq'].includes(region.toLowerCase());
 
+const setMeta = (name: string, content: string, property = false) => {
+  const selector = property ? `meta[property='${name}']` : `meta[name='${name}']`;
+  let tag = document.head.querySelector(selector) as HTMLMetaElement | null;
+  if (!tag) {
+    tag = document.createElement('meta');
+    if (property) tag.setAttribute('property', name);
+    else tag.setAttribute('name', name);
+    document.head.appendChild(tag);
+  }
+  tag.content = content;
+};
+
 export const App = () => {
   const [query, setQuery] = useState('');
-  const [routeSuburbId, setRouteSuburbId] = useState<string | null>(() => getRouteSuburbId());
+  const [route, setRoute] = useState<Route>(() => getRoute());
 
   useEffect(() => {
-    const onPop = () => setRouteSuburbId(getRouteSuburbId());
+    const onPop = () => setRoute(getRoute());
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
   }, []);
@@ -31,67 +54,39 @@ export const App = () => {
       .slice(0, 10);
   }, [query]);
 
-  const activeSuburbId = routeSuburbId ?? suggestions[0]?.id ?? suburbs[0]?.id;
+  const activeSuburbId = route.type === 'report' ? route.suburbId : suggestions[0]?.id ?? suburbs[0]?.id;
   const suburb = suburbs.find((s) => s.id === activeSuburbId);
   const mapping = suburbMappings.find((m) => m.suburbId === activeSuburbId);
   const authority = authorities.find((a) => a.id === mapping?.authorityId);
   const supplyZone = supplyZones.find((z) => z.id === mapping?.supplyZoneId);
   const report = reports.find((r) => r.suburbId === activeSuburbId);
 
-  const nearbySuburbs = useMemo(() => {
-    if (!suburb) return [];
-    return suburbs.filter((s) => s.id !== suburb.id && (s.postcode === suburb.postcode || s.lga === suburb.lga)).slice(0, 5);
-  }, [suburb]);
 
   const reportUrl = suburb ? `${window.location.origin}/report/${slugFor(suburb.id)}` : window.location.href;
 
   useEffect(() => {
+    if (route.type === 'privacy') {
+      document.title = `Privacy & Disclaimer | ${SITE_NAME}`;
+      setMeta('description', 'Privacy and disclaimer information for WhatsInMyTapWater.com. This site currently displays sample placeholder data only.');
+      return;
+    }
+    if (route.type === 'methodology') {
+      document.title = `Methodology | ${SITE_NAME}`;
+      setMeta('description', 'Methodology for sample suburb water reports on WhatsInMyTapWater.com, including placeholder data handling and confidence labels.');
+      return;
+    }
+    if (route.type === 'notFound') {
+      document.title = `Page not found | ${SITE_NAME}`;
+      setMeta('description', 'The page you requested was not found.');
+      return;
+    }
+
     if (!suburb) return;
-    document.title = `${suburb.suburb} Tap Water Report (${SAMPLE_LABEL}) | WhatsInMyTapWater.com`;
-
-    const setMeta = (name: string, content: string, property = false) => {
-      const selector = property ? `meta[property='${name}']` : `meta[name='${name}']`;
-      let tag = document.head.querySelector(selector) as HTMLMetaElement | null;
-      if (!tag) {
-        tag = document.createElement('meta');
-        if (property) tag.setAttribute('property', name);
-        else tag.setAttribute('name', name);
-        document.head.appendChild(tag);
-      }
-      tag.content = content;
-    };
-
+    document.title = `${suburb.suburb} Tap Water Report (${SAMPLE_LABEL}) | ${SITE_NAME}`;
     setMeta('description', `${suburb.suburb} ${suburb.postcode} tap water report with sample placeholder values, freshness and confidence badges.`);
     setMeta('og:title', `${suburb.suburb} Tap Water Snapshot (${SAMPLE_LABEL})`, true);
     setMeta('og:description', `Shareable suburb report for ${suburb.suburb}. All values are currently sample placeholder data only.`, true);
     setMeta('og:url', reportUrl, true);
-
-    const jsonLd = {
-      webPage: {
-        '@context': 'https://schema.org',
-        '@type': 'WebPage',
-        name: `${suburb.suburb} Tap Water Report (${SAMPLE_LABEL})`,
-        url: reportUrl,
-        description: `Placeholder suburb water report for ${suburb.suburb} ${suburb.postcode}.`,
-      },
-      breadcrumbList: {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: window.location.origin },
-          { '@type': 'ListItem', position: 2, name: 'Suburb Reports', item: `${window.location.origin}/report` },
-          { '@type': 'ListItem', position: 3, name: `${suburb.suburb} ${suburb.postcode}`, item: reportUrl },
-        ],
-      },
-      faqPage: {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: [
-          { '@type': 'Question', name: 'Is this live tap water data?', acceptedAnswer: { '@type': 'Answer', text: 'No. This page contains sample placeholder data only.' } },
-          { '@type': 'Question', name: 'How often will sources refresh?', acceptedAnswer: { '@type': 'Answer', text: 'Current placeholder cadence is shown in the source freshness badge.' } },
-        ],
-      },
-    };
 
     let script = document.getElementById('suburb-jsonld');
     if (!script) {
@@ -100,20 +95,37 @@ export const App = () => {
       script.setAttribute('type', 'application/ld+json');
       document.head.appendChild(script);
     }
-    script.textContent = JSON.stringify(jsonLd);
-  }, [suburb, reportUrl]);
 
-  const openReport = (suburbId: string) => {
-    window.history.pushState({}, '', `/report/${slugFor(suburbId)}`);
-    setRouteSuburbId(suburbId);
+    script.textContent = JSON.stringify({
+      webPage: {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: `${suburb.suburb} Tap Water Report (${SAMPLE_LABEL})`,
+        url: reportUrl,
+        description: `Placeholder suburb water report for ${suburb.suburb} ${suburb.postcode}.`,
+      },
+    });
+  }, [route.type, suburb, suburb?.suburb, suburb?.postcode, reportUrl]);
+
+  const navigate = (path: string) => {
+    window.history.pushState({}, '', path);
+    setRoute(getRoute());
   };
 
-  const copyLink = async () => navigator.clipboard.writeText(reportUrl);
-  const copyTextSummary = async () => {
-    if (!suburb || !report || !authority) return;
-    const text = `${SAMPLE_LABEL}\n${suburb.suburb} ${suburb.postcode}\nAuthority: ${authority.name}\nConfidence: ${report.confidence.level} (${report.confidence.scoreOutOf100}/100)\nFreshness: ${report.sourceFreshness.sourceName} fetched ${report.sourceFreshness.fetchedAt}\n${report.parameters.map((p) => `${p.displayName}: ${p.placeholderValue} ${p.unit} [sample]`).join('\n')}\nNo health guidance provided.`;
-    await navigator.clipboard.writeText(text);
-  };
+  const openReport = (suburbId: string) => navigate(`/report/${slugFor(suburbId)}`);
+
+
+  if (route.type === 'privacy') {
+    return <main className="layout"><h1>Privacy & Disclaimer</h1><p>This website currently presents sample/placeholder data only and does not provide live utility measurements.</p><p>Information is for product preview purposes and is not health, legal, or engineering advice.</p><p>Commercial references to Jila Water are limited to Brisbane/SEQ context and are shown transparently as referral CTAs.</p><p><button onClick={() => navigate('/')}>Back to reports</button></p></main>;
+  }
+
+  if (route.type === 'methodology') {
+    return <main className="layout"><h1>Methodology</h1><p>All suburb values are sample placeholders for MVP testing. No live readings are currently ingested.</p><p>Confidence and freshness badges indicate demo logic and should not be treated as certified water compliance statements.</p><p>Future production data should include source timestamping, authority attribution, and clear QA workflows.</p><p><button onClick={() => navigate('/')}>Back to reports</button></p></main>;
+  }
+
+  if (route.type === 'notFound') {
+    return <main className="layout"><h1>404 — Page not found</h1><p>We could not find that page. Use the button below to return to the report directory.</p><p><button onClick={() => navigate('/')}>Go to homepage</button></p></main>;
+  }
 
   if (!suburb || !mapping || !authority || !supplyZone || !report) {
     return <main className="layout">Unable to load sample report data.</main>;
@@ -143,34 +155,6 @@ export const App = () => {
         <ul>{report.parameters.map((param) => <li key={param.key}><strong>{param.displayName}:</strong> {param.placeholderValue} {param.unit} <em>(sample)</em></li>)}</ul>
       </section>
 
-      <section className="actions card">
-        <button onClick={copyLink}>Copy report link</button>
-        <button onClick={() => window.print()}>Print report</button>
-        <button disabled>Download report (coming soon)</button>
-        <button disabled>Share to Facebook (placeholder)</button>
-        <button disabled>Share to Reddit (placeholder)</button>
-        <button disabled>Share to WhatsApp (placeholder)</button>
-        <button onClick={copyTextSummary}>Copy plain-text summary</button>
-      </section>
-
-      <section className="card">
-        <h3>Report details</h3>
-        <p><strong>Water authority:</strong> {authority.name} ({authority.serviceArea})</p>
-        <p><strong>Supply zone:</strong> {supplyZone.displayName} ({supplyZone.code})</p>
-        <p><strong>Source freshness:</strong> {report.sourceFreshness.sourceName} · fetched {report.sourceFreshness.fetchedAt} · expected refresh {report.sourceFreshness.expectedRefreshDays} days</p>
-        <p><strong>Confidence reason:</strong> {report.confidence.reason}</p>
-      </section>
-
-      <section className="card">
-        <h3>Compare with another suburb</h3>
-        <div className="chips">{suburbs.filter((s) => s.id !== suburb.id).slice(0, 6).map((s) => <button key={s.id} onClick={() => openReport(s.id)}>{s.suburb}</button>)}</div>
-      </section>
-
-      <section className="card">
-        <h3>Nearby suburbs (sample links)</h3>
-        <div className="chips">{nearbySuburbs.length ? nearbySuburbs.map((s) => <button key={s.id} onClick={() => openReport(s.id)}>{s.suburb} ({s.postcode})</button>) : <p className="muted">No nearby sample suburbs available.</p>}</div>
-      </section>
-
       {isBrisbaneOrSeq(suburb.region) ? (
         <section className="card ctaCard">
           <h3>Jila Water for Brisbane/SEQ households</h3>
@@ -184,15 +168,13 @@ export const App = () => {
         </section>
       )}
 
-      <section className="card faq">
-        <h3>Suburb report FAQ</h3>
-        <h4>Is this live tap water data?</h4>
-        <p>No. Every value on this page is clearly marked as sample/placeholder data.</p>
-        <h4>Can I use this for health decisions?</h4>
-        <p>No. This page does not provide health guidance or medical recommendations.</p>
-        <h4>Why share this report?</h4>
-        <p>It helps neighbors discuss local water transparency while the live data integrations are being built.</p>
-      </section>
+      <footer className="card">
+        <p><strong>Important:</strong> all values are sample/placeholder only, not live network readings.</p>
+        <div className="chips">
+          <button onClick={() => navigate('/privacy')}>Privacy & disclaimer</button>
+          <button onClick={() => navigate('/methodology')}>Methodology</button>
+        </div>
+      </footer>
     </main>
   );
 };

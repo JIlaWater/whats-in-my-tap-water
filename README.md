@@ -5,6 +5,12 @@ WhatsInMyTapWater.com is an MVP web app foundation for showing suburb-level tap 
 
 This current version intentionally uses **placeholder/sample data only** and does **not** connect to live utility feeds.
 
+## Production-safety notice
+- All displayed water values are explicitly sample/placeholder data.
+- This app does not publish live utility lab readings in its current state.
+- The app must not be used for health decisions or compliance claims.
+- Keep product messaging neutral and non-alarmist.
+
 ## Tech stack
 - React 18
 - TypeScript
@@ -32,14 +38,21 @@ This current version intentionally uses **placeholder/sample data only** and doe
 ## Current MVP features
 - Renders suburb cards with water quality metrics.
 - Displays explicit placeholder labels on every report.
-- Shows a safety disclaimer that no live data is being used.
-- Jila Water CTA is shown **only** for Brisbane/SEQ-labelled regions.
-- CTA is hidden for non-Brisbane/SEQ regions.
+- Includes privacy/disclaimer and methodology pages.
+- Adds SEO bootstrap files (`robots.txt`, `sitemap.xml`) and default social meta tags.
+- Jila Water CTA is shown **only** for Brisbane/SEQ-labelled regions and uses `https://jilawater.com.au/` URLs.
 
-## How placeholder data is labelled
-- Dataset source includes the label: `Placeholder/Sample Data`.
-- Each record includes a note: `Sample values only. Not live, certified, or user-specific.`
-- Top-of-page banner states no live water network feed is used.
+## Cloudflare Pages deployment notes
+1. Connect the repo in Cloudflare Pages.
+2. Build command: `npm run build`
+3. Build output directory: `dist`
+4. Ensure SPA routing fallback is enabled via `public/_redirects` containing `/* /index.html 200`.
+5. Verify `robots.txt` and `sitemap.xml` are served from the domain root.
+6. After deploy, validate key routes:
+   - `/`
+   - `/privacy`
+   - `/methodology`
+   - `/report/<suburb-id>`
 
-## Next recommended build task
-Build a validated suburb search + postcode lookup flow with region normalization and strict data-source tagging, so Brisbane/SEQ CTA gating is based on normalized geography rather than free-form labels.
+## Next recommended task
+Replace sample suburb records with a validated ingestion pipeline that stores authoritative source timestamps and QA checks before publishing any non-placeholder values.
