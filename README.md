@@ -192,3 +192,50 @@ CI guardrails:
 - does not scrape live data
 - does not modify production data
 - does not replace human review
+
+## Adding first source-backed Brisbane/SEQ records
+
+Use this workflow to manually create the first 5–10 source-backed Brisbane/SEQ records without scraping, auto-publishing, or changing beta/sample UI behavior.
+
+### 1) Record sources first
+- Complete `data/sources/brisbane-seq-source-checklist.md` for Seqwater, Urban Utilities, Unitywater, Queensland Health, and any relevant council source notes.
+- Capture source URL, owner, publication date, last checked date, coverage level, parameters, cadence, confidence, notes, reviewer initials, and review date before entering water records.
+
+### 2) Update CSV templates manually
+- Add source metadata into `data/templates/source_references.csv`.
+- Add update cadence metadata into `data/templates/source_freshness_cadence.csv`.
+- Add authority/zone/suburb mapping rows into:
+  - `data/templates/water_authorities.csv`
+  - `data/templates/supply_zones.csv`
+  - `data/templates/suburbs_postcodes.csv`
+- Add verified water parameter rows to `data/templates/water_quality_parameters.csv`.
+- For first pass, keep records as `review_status=imported` until human QA is complete.
+- See placeholder-only guidance in `data/examples/brisbane-seq-import-example.md`.
+
+### 3) Run import preview
+```bash
+npm run import:brisbane-seq
+```
+
+### 4) Run reviewed-record validation
+```bash
+npm run validate:review-records
+```
+
+### 5) Keep records imported until human QA
+- Imported records must remain imported until source/date/value/unit/coverage/confidence checks are completed by a human reviewer.
+- Use `data/review/pre-publish-safety-checklist.md` to verify pre-publish gates.
+
+### 6) When records may move to reviewed
+Records may move from `imported` to `reviewed` only after:
+- source metadata is complete,
+- row-level values and units are checked against official source pages,
+- confidence and coverage are set,
+- reviewer initials/date are recorded.
+
+### 7) Why records must not become publishable too early
+Records must not become `publishable` until source, confidence, coverage, and review checks are complete because:
+- missing metadata breaks traceability,
+- low-confidence rows can mislead users,
+- QA controls are required for safety and compliance,
+- the app remains beta/sample-protected until sufficient safely reviewed records exist.
