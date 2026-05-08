@@ -175,7 +175,7 @@ export const App = () => {
         <section className="card ctaCard">
           <h3>Jila Water for Brisbane/SEQ households</h3>
           <p>Explore Jila Water for Brisbane and South East Queensland locations.</p>
-          <a className="cta" href="https://jilawater.com" target="_blank" rel="noreferrer">Visit Jila Water</a>
+          <a className="cta" href="https://jilawater.com.au/free-home-water-assessment/?utm_source=whats_in_my_tap_water&utm_medium=referral&utm_campaign=suburb_water_report&utm_content=seq_cta" target="_blank" rel="noreferrer">Book a Free Jila Water Assessment</a>
         </section>
       ) : (
         <section className="card ctaCard neutral">
