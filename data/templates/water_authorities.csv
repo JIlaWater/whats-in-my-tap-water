@@ -1,5 +1,4 @@
-authority_id,authority_name,service_area,primary_region,official_website_url,source_reference_id,coverage_level,review_status
-urban-utilities,Urban Utilities,Brisbane / Ipswich / Lockyer Valley,Brisbane,https://www.urbanutilities.com.au/,src-uu-home,authority,sample
-unitywater,Unitywater,Moreton Bay / Sunshine Coast / Noosa,SEQ,https://www.unitywater.com/,src-unity-home,authority,sample
-seqwater,Seqwater,South East Queensland bulk water supply,SEQ,https://www.seqwater.com.au/,src-seqwater-home,authority,sample
-qld-health,Queensland Health,Drinking water health guidance,QLD,https://www.health.qld.gov.au/,src-qh-guidance,state,sample
+authority_id,authority_name,service_area,primary_region,official_website_url,source_reference_id,source_url,publication_date,last_checked_date,confidence_level,coverage_level,review_status,notes
+urban-utilities,Urban Utilities,Brisbane / Ipswich / Lockyer Valley,Brisbane,https://www.urbanutilities.com.au/,src-uu-home,https://example.com/sample/authorities,2026-01-01,2026-05-01,medium,authority,sample,Placeholder authority metadata only.
+unitywater,Unitywater,Moreton Bay / Sunshine Coast / Noosa,SEQ,https://www.unitywater.com/,src-unity-home,https://example.com/sample/authorities,2026-01-01,2026-05-01,medium,authority,sample,Placeholder authority metadata only.
+seqwater,Seqwater,South East Queensland bulk water supply,SEQ,https://www.seqwater.com.au/,src-seqwater-home,https://example.com/sample/authorities,2026-01-01,2026-05-01,medium,authority,sample,Placeholder authority metadata only.

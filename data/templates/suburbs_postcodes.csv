@@ -1,2 +1,4 @@
-suburb_id,suburb_name,state,postcode,council_name,region,authority_id,supply_zone_id,coverage_level,review_status
-au-qld-south-brisbane-4101,South Brisbane,QLD,4101,Brisbane City,Brisbane,urban-utilities,zone-brisbane-inner,suburb,sample
+suburb_id,suburb_name,state,postcode,council_name,region,authority_id,supply_zone_id,source_url,publication_date,last_checked_date,confidence_level,coverage_level,review_status,notes
+au-qld-south-brisbane-4101,South Brisbane,QLD,4101,Brisbane City,Brisbane,urban-utilities,zone-brisbane-inner,https://example.com/sample/suburbs,2026-01-01,2026-05-01,low,suburb,sample,Placeholder suburb-to-postcode mapping only.
+au-qld-fortitude-valley-4006,Fortitude Valley,QLD,4006,Brisbane City,Brisbane,urban-utilities,zone-brisbane-inner,https://example.com/sample/suburbs,2026-01-01,2026-05-01,low,suburb,sample,Placeholder suburb-to-postcode mapping only.
+au-qld-woodridge-4114,Woodridge,QLD,4114,Logan City,SEQ,urban-utilities,zone-logan-north,https://example.com/sample/suburbs,2026-01-01,2026-05-01,low,suburb,sample,Placeholder suburb-to-postcode mapping only.

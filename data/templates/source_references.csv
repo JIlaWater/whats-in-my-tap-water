@@ -2,4 +2,3 @@ source_reference_id,source_name,authority_id,source_url,document_title,publicati
 src-seqwater-home,Seqwater Website,seqwater,https://www.seqwater.com.au/,Seqwater source landing page,2026-01-01,2026-05-01,medium,authority,,QLD,sample,Structure-only record. Replace with specific report URLs when imported.
 src-uu-home,Urban Utilities Website,urban-utilities,https://www.urbanutilities.com.au/,Urban Utilities source landing page,2026-01-01,2026-05-01,medium,authority,,QLD,sample,Structure-only record.
 src-unity-home,Unitywater Website,unitywater,https://www.unitywater.com/,Unitywater source landing page,2026-01-01,2026-05-01,medium,authority,,QLD,sample,Structure-only record.
-src-qh-guidance,Queensland Health guidance,qld-health,https://www.health.qld.gov.au/,Queensland Health drinking water guidance,2026-01-01,2026-05-01,high,state,,QLD,sample,Structure-only record.

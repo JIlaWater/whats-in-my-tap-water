@@ -1,2 +1,4 @@
-supply_zone_id,authority_id,zone_code,display_name,description,coverage_level,review_status
-zone-brisbane-inner,urban-utilities,UU-BNE-INNER,Brisbane Inner Grid,Placeholder zone for inner Brisbane suburbs.,supply_zone,sample
+supply_zone_id,authority_id,zone_code,display_name,description,source_url,publication_date,last_checked_date,confidence_level,coverage_level,review_status
+zone-brisbane-inner,urban-utilities,UU-BNE-INNER,Brisbane Inner Grid,Placeholder zone for inner Brisbane suburbs.,https://example.com/sample/supply-zones,2026-01-01,2026-05-01,low,supply_zone,sample
+zone-logan-north,urban-utilities,UU-LOG-NORTH,Logan North Grid,Placeholder zone for northern Logan suburbs.,https://example.com/sample/supply-zones,2026-01-01,2026-05-01,low,supply_zone,sample
+zone-moreton-coastal,unitywater,UW-MB-COAST,Moreton Coastal Grid,Placeholder zone for Moreton Bay coastal suburbs.,https://example.com/sample/supply-zones,2026-01-01,2026-05-01,low,supply_zone,sample
