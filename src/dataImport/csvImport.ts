@@ -2,17 +2,47 @@ import type { CoverageLevel, ImportValidationIssue, ReviewStatus, SourceReferenc
 
 const requiredCoverageLevels: CoverageLevel[] = ['suburb', 'postcode', 'supply_zone', 'authority', 'council', 'state'];
 const validStatuses: ReviewStatus[] = ['sample', 'imported', 'reviewed', 'publishable', 'published'];
+const validConfidenceLevels = new Set(['low', 'medium', 'high']);
 const validCoverageSet = new Set(requiredCoverageLevels);
 const validStatusSet = new Set(validStatuses);
 
+const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+const splitCsvLine = (line: string): string[] => {
+  const values: string[] = [];
+  let current = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i += 1) {
+    const char = line[i];
+
+    if (char === '"') {
+      if (inQuotes && line[i + 1] === '"') {
+        current += '"';
+        i += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (char === ',' && !inQuotes) {
+      values.push(current.trim());
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+
+  values.push(current.trim());
+  return values;
+};
+
 export const parseCsv = (raw: string): Record<string, string>[] => {
-  const lines = raw.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  const lines = raw.split(/\r?\n/).filter((line) => line.trim().length > 0);
   if (lines.length < 2) return [];
 
-  const headers = lines[0].split(',').map((h) => h.trim());
+  const headers = splitCsvLine(lines[0]).map((h) => h.trim());
 
   return lines.slice(1).map((line) => {
-    const values = line.split(',').map((v) => v.trim());
+    const values = splitCsvLine(line);
     return headers.reduce<Record<string, string>>((acc, header, index) => {
       acc[header] = values[index] ?? '';
       return acc;
@@ -20,7 +50,11 @@ export const parseCsv = (raw: string): Record<string, string>[] => {
   });
 };
 
-const isIsoDate = (value: string) => /^\d{4}-\d{2}-\d{2}$/.test(value);
+const isIsoDate = (value: string) => datePattern.test(value);
+
+const addIssue = (issues: ImportValidationIssue[], rowNumber: number, field: string, message: string) => {
+  issues.push({ rowNumber, field, message });
+};
 
 const addRequiredField = (
   value: string | undefined,
@@ -29,7 +63,7 @@ const addRequiredField = (
   field: string,
   message: string,
 ) => {
-  if (!value) issues.push({ rowNumber, field, message });
+  if (!value) addIssue(issues, rowNumber, field, message);
 };
 
 const validateSharedSourceFields = (record: Record<string, string>, rowNumber: number): ImportValidationIssue[] => {
@@ -41,23 +75,31 @@ const validateSharedSourceFields = (record: Record<string, string>, rowNumber: n
   addRequiredField(record.confidence_level, issues, rowNumber, 'confidence_level', 'confidence level is required.');
   addRequiredField(record.coverage_level, issues, rowNumber, 'coverage_level', 'coverage level is required.');
 
+  if (record.source_url && !record.source_url.startsWith('http')) {
+    addIssue(issues, rowNumber, 'source_url', 'source URL must start with http:// or https://.');
+  }
+
   if (record.publication_date && !isIsoDate(record.publication_date)) {
-    issues.push({ rowNumber, field: 'publication_date', message: 'publication date must use YYYY-MM-DD format.' });
+    addIssue(issues, rowNumber, 'publication_date', 'publication date must use YYYY-MM-DD format.');
   }
   if (record.last_checked_date && !isIsoDate(record.last_checked_date)) {
-    issues.push({ rowNumber, field: 'last_checked_date', message: 'last checked date must use YYYY-MM-DD format.' });
+    addIssue(issues, rowNumber, 'last_checked_date', 'last checked date must use YYYY-MM-DD format.');
+  }
+
+  if (record.confidence_level && !validConfidenceLevels.has(record.confidence_level)) {
+    addIssue(issues, rowNumber, 'confidence_level', 'confidence level must be one of: low, medium, high.');
   }
 
   if (record.coverage_level && !validCoverageSet.has(record.coverage_level as CoverageLevel)) {
-    issues.push({ rowNumber, field: 'coverage_level', message: `coverage level must be one of: ${requiredCoverageLevels.join(', ')}.` });
+    addIssue(issues, rowNumber, 'coverage_level', `coverage level must be one of: ${requiredCoverageLevels.join(', ')}.`);
   }
 
   if (record.review_status && !validStatusSet.has(record.review_status as ReviewStatus)) {
-    issues.push({ rowNumber, field: 'review_status', message: `review status must be one of: ${validStatuses.join(', ')}.` });
+    addIssue(issues, rowNumber, 'review_status', `review status must be one of: ${validStatuses.join(', ')}.`);
   }
 
   if ((record.review_status === 'publishable' || record.review_status === 'published') && record.confidence_level === 'low') {
-    issues.push({ rowNumber, field: 'confidence_level', message: 'publishable/published rows must not use low confidence.' });
+    addIssue(issues, rowNumber, 'confidence_level', 'publishable/published rows must not use low confidence.');
   }
 
   return issues;
@@ -80,7 +122,24 @@ export const validateWaterQualityParameterRow = (record: Record<string, string>,
   const issues = validateSharedSourceFields(record, rowNumber);
 
   if ((record.review_status === 'publishable' || record.review_status === 'published') && !record.value_numeric) {
-    issues.push({ rowNumber, field: 'value_numeric', message: 'publishable/published rows require a numeric value.' });
+    addIssue(issues, rowNumber, 'value_numeric', 'publishable/published rows require a numeric value.');
+  }
+
+  return issues;
+};
+
+export const validateEntityLinkageRow = (record: Record<string, string>, rowNumber: number): ImportValidationIssue[] => {
+  const issues: ImportValidationIssue[] = [];
+
+  addRequiredField(record.coverage_level, issues, rowNumber, 'coverage_level', 'coverage level is required.');
+  addRequiredField(record.review_status, issues, rowNumber, 'review_status', 'review status is required.');
+
+  if (record.coverage_level && !validCoverageSet.has(record.coverage_level as CoverageLevel)) {
+    addIssue(issues, rowNumber, 'coverage_level', `coverage level must be one of: ${requiredCoverageLevels.join(', ')}.`);
+  }
+
+  if (record.review_status && !validStatusSet.has(record.review_status as ReviewStatus)) {
+    addIssue(issues, rowNumber, 'review_status', `review status must be one of: ${validStatuses.join(', ')}.`);
   }
 
   return issues;

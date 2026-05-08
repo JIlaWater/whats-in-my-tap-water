@@ -62,6 +62,8 @@ Replace sample suburb records with a validated ingestion pipeline that stores au
 A safe import structure now exists for replacing placeholder data with source-backed records.
 
 ### Folder structure
+See also: `data/templates/README.md` for the Brisbane/SEQ bootstrap import workflow and safety guardrails.
+
 - `data/templates/suburbs_postcodes.csv`
 - `data/templates/water_authorities.csv`
 - `data/templates/supply_zones.csv`
