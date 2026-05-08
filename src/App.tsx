@@ -61,7 +61,6 @@ export const App = () => {
   const supplyZone = supplyZones.find((z) => z.id === mapping?.supplyZoneId);
   const report = reports.find((r) => r.suburbId === activeSuburbId);
 
-
   const reportUrl = suburb ? `${window.location.origin}/report/${slugFor(suburb.id)}` : window.location.href;
 
   useEffect(() => {
@@ -114,7 +113,6 @@ export const App = () => {
 
   const openReport = (suburbId: string) => navigate(`/report/${slugFor(suburbId)}`);
 
-
   if (route.type === 'privacy') {
     return <main className="layout"><h1>Privacy & Disclaimer</h1><p>This website currently presents sample/placeholder data only and does not provide live utility measurements.</p><p>Information is for product preview purposes and is not health, legal, or engineering advice.</p><p>Commercial references to Jila Water are limited to Brisbane/SEQ context and are shown transparently as referral CTAs.</p><p><button onClick={() => navigate('/')}>Back to reports</button></p></main>;
   }
@@ -133,12 +131,15 @@ export const App = () => {
 
   return (
     <main className="layout">
-      <header className="top">
-        <h1>Suburb Tap Water Report</h1>
-        <p className="banner"><strong>{SAMPLE_LABEL}</strong> — no live water readings or health guidance.</p>
+      <p className="topBanner"><strong>{SAMPLE_LABEL}</strong> — This beta shows demo values only (not live utility measurements).</p>
+
+      <header className="hero card">
+        <h1>What’s Really In Your Tap Water?</h1>
+        <p className="subheading">Enter your suburb or postcode for a free plain-English tap water report.</p>
+        <p className="betaNote">Beta preview: all suburb metrics, confidence, and freshness values remain sample placeholders.</p>
       </header>
 
-      <section className="searchPanel">
+      <section className="searchPanel card">
         <h2>Search suburb or postcode</h2>
         <input placeholder="Try South Brisbane or 4101" value={query} onChange={(e) => setQuery(e.target.value)} />
         <div className="chips">{suggestions.map((s) => <button key={s.id} onClick={() => openReport(s.id)}>{s.suburb} ({s.postcode})</button>)}</div>
@@ -148,32 +149,35 @@ export const App = () => {
         <p className="kicker">Tap Water Snapshot</p>
         <h2>{suburb.suburb}, {suburb.state} {suburb.postcode}</h2>
         <div className="badges">
+          <span className="badge trust">Source: {authority.name}</span>
+          <span className="badge trust">Zone: {supplyZone.displayName}</span>
           <span className="badge">Confidence: {report.confidence.level} ({report.confidence.scoreOutOf100}/100)</span>
           <span className="badge">Freshness: {report.sourceFreshness.staleness}</span>
           <span className="badge warn">{SAMPLE_LABEL}</span>
         </div>
-        <ul>{report.parameters.map((param) => <li key={param.key}><strong>{param.displayName}:</strong> {param.placeholderValue} {param.unit} <em>(sample)</em></li>)}</ul>
+        <ul>{report.parameters.map((param) => <li key={param.key}><strong>{param.displayName}:</strong> {param.placeholderValue} {param.unit} <em>(sample/placeholder)</em></li>)}</ul>
       </section>
 
       {isBrisbaneOrSeq(suburb.region) ? (
         <section className="card ctaCard">
           <h3>Jila Water for Brisbane/SEQ households</h3>
-          <p>Explore Jila Water for Brisbane and South East Queensland locations.</p>
+          <p>Explore water treatment options for Brisbane and South East Queensland households.</p>
           <a className="cta" href="https://jilawater.com.au/free-home-water-assessment/?utm_source=whats_in_my_tap_water&utm_medium=referral&utm_campaign=suburb_water_report&utm_content=seq_cta" target="_blank" rel="noreferrer">Book a Free Jila Water Assessment</a>
         </section>
       ) : (
         <section className="card ctaCard neutral">
-          <h3>Outside Jila service area</h3>
-          <p>This suburb is currently outside the Brisbane/SEQ service CTA. Check local providers and council resources.</p>
+          <h3>Local information only</h3>
+          <p>This suburb is outside Brisbane/SEQ, so no Jila referral is shown. Please check your local council and water authority resources.</p>
         </section>
       )}
 
-      <footer className="card">
-        <p><strong>Important:</strong> all values are sample/placeholder only, not live network readings.</p>
-        <div className="chips">
-          <button onClick={() => navigate('/privacy')}>Privacy & disclaimer</button>
+      <footer className="card footer">
+        <p className="footerWarning"><strong>Warning:</strong> This beta report contains sample/placeholder data only. No live water data is currently displayed.</p>
+        <div className="footerLinks">
           <button onClick={() => navigate('/methodology')}>Methodology</button>
+          <button onClick={() => navigate('/privacy')}>Privacy & disclaimer</button>
         </div>
+        <p className="muted">Built by <a href="https://jilawater.com.au/" target="_blank" rel="noreferrer">Jila Water</a> as a free Australian homeowner education project.</p>
       </footer>
     </main>
   );
