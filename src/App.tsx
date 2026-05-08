@@ -134,9 +134,16 @@ export const App = () => {
       <p className="topBanner"><strong>{SAMPLE_LABEL}</strong> — This beta shows demo values only (not live utility measurements).</p>
 
       <header className="hero card">
-        <h1>What’s Really In Your Tap Water?</h1>
-        <p className="subheading">Enter your suburb or postcode for a free plain-English tap water report.</p>
-        <p className="betaNote">Beta preview: all suburb metrics, confidence, and freshness values remain sample placeholders.</p>
+        <div className="heroContent">
+          <div className="heroCopy">
+            <h1>What’s Really In Your Tap Water?</h1>
+            <p className="subheading">Enter your suburb or postcode for a free plain-English tap water report.</p>
+            <p className="betaNote">Beta preview: all suburb metrics, confidence, and freshness values remain sample placeholders.</p>
+          </div>
+          <figure className="heroMascot">
+            <img src="/kangaroo-mascot.svg" alt="Australian kangaroo mascot drinking a glass of water with the Australian flag draped over its shoulders" loading="eager" decoding="async" />
+          </figure>
+        </div>
       </header>
 
       <section className="searchPanel card">
