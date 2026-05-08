@@ -1,0 +1,2 @@
+parameter_key,display_name,unit,value_numeric,result_period_start,result_period_end,method_note,source_reference_id,publication_date,last_checked_date,confidence_level,coverage_level,review_status
+hardness_mg_l,Hardness,mg/L,,,,Placeholder only - no official values yet.,src-uu-home,2026-01-01,2026-05-01,low,suburb,sample

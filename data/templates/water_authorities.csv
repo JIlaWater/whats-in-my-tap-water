@@ -1,0 +1,5 @@
+authority_id,authority_name,service_area,primary_region,official_website_url,source_reference_id,coverage_level,review_status
+urban-utilities,Urban Utilities,Brisbane / Ipswich / Lockyer Valley,Brisbane,https://www.urbanutilities.com.au/,src-uu-home,authority,sample
+unitywater,Unitywater,Moreton Bay / Sunshine Coast / Noosa,SEQ,https://www.unitywater.com/,src-unity-home,authority,sample
+seqwater,Seqwater,South East Queensland bulk water supply,SEQ,https://www.seqwater.com.au/,src-seqwater-home,authority,sample
+qld-health,Queensland Health,Drinking water health guidance,QLD,https://www.health.qld.gov.au/,src-qh-guidance,state,sample

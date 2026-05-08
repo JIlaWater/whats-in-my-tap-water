@@ -1,0 +1,2 @@
+source_reference_id,expected_update_cadence_days,last_import_attempt_date,last_successful_import_date,freshness_state,last_checked_date,review_status
+src-seqwater-home,30,,,aging,2026-05-01,sample

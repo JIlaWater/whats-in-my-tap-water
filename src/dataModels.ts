@@ -1,4 +1,6 @@
-export type DataLabel = 'SAMPLE_PLACEHOLDER';
+export type DataReviewStatus = 'sample' | 'imported' | 'reviewed' | 'publishable' | 'published';
+
+export type DataLabel = DataReviewStatus;
 
 export type AustralianSuburb = {
   id: string;

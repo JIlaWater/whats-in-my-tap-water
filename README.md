@@ -56,3 +56,53 @@ This current version intentionally uses **placeholder/sample data only** and doe
 
 ## Next recommended task
 Replace sample suburb records with a validated ingestion pipeline that stores authoritative source timestamps and QA checks before publishing any non-placeholder values.
+
+## Official source-data ingestion (Brisbane/SEQ bootstrap)
+
+A safe import structure now exists for replacing placeholder data with source-backed records.
+
+### Folder structure
+- `data/templates/suburbs_postcodes.csv`
+- `data/templates/water_authorities.csv`
+- `data/templates/supply_zones.csv`
+- `data/templates/water_quality_parameters.csv`
+- `data/templates/source_references.csv`
+- `data/templates/source_freshness_cadence.csv`
+- `src/dataImport/types.ts`
+- `src/dataImport/csvImport.ts`
+
+### Safety rules enforced by validation
+Source references must include:
+- source URL
+- publication date (`YYYY-MM-DD`)
+- last checked date (`YYYY-MM-DD`)
+- confidence level
+- coverage level (`suburb`, `postcode`, `supply_zone`, `authority`, `council`, `state`)
+
+Review status values are controlled and must be one of:
+- `sample`
+- `imported`
+- `reviewed`
+- `publishable`
+- `published`
+
+### Brisbane/SEQ authority scope for initial import templates
+- Seqwater
+- Urban Utilities
+- Unitywater
+- Queensland Health guidance
+- Council/source notes where needed
+
+### Safe import workflow
+1. Keep sample values in app data until source records validate.
+2. Populate source templates with official URLs and dates first.
+3. Parse + validate CSV rows using `src/dataImport/csvImport.ts`.
+4. Move records through status: `sample` -> `imported` -> `reviewed` -> `publishable` -> `published`.
+5. Only publish non-sample values after validation and review are complete.
+
+### Important guardrails
+- Do not scrape live data directly in this stage.
+- Do not invent water values.
+- Keep beta warnings visible in UI.
+- Do not publish real-looking values without URL, publication date, and confidence level.
+- Keep Jila CTA logic Brisbane/SEQ-only.

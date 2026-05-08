@@ -7,7 +7,7 @@ import type {
   WaterAuthority,
 } from './dataModels';
 
-const SAMPLE = 'SAMPLE_PLACEHOLDER' as const;
+const SAMPLE = 'sample' as const;
 
 export const suburbs: AustralianSuburb[] = [
   { id: 'au-qld-south-brisbane-4101', suburb: 'South Brisbane', state: 'QLD', postcode: '4101', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
@@ -36,14 +36,14 @@ export const suburbs: AustralianSuburb[] = [
 export const authorities: WaterAuthority[] = [
   { id: 'urban-utilities', name: 'Urban Utilities', serviceArea: 'Brisbane / Ipswich / Lockyer Valley', plannedSourceIntegration: ['Urban Utilities annual reports', 'Seqwater treatment data'], dataLabel: SAMPLE },
   { id: 'unitywater', name: 'Unitywater', serviceArea: 'Moreton Bay / Sunshine Coast / Noosa', plannedSourceIntegration: ['Unitywater quality reports', 'Seqwater source summaries'], dataLabel: SAMPLE },
-  { id: 'logan-water', name: 'Logan Water', serviceArea: 'Logan / Scenic Rim / Redland selected supply interfaces', plannedSourceIntegration: ['Logan City water reports', 'Seqwater catchment updates'], dataLabel: SAMPLE },
+  { id: 'seqwater', name: 'Seqwater', serviceArea: 'South East Queensland bulk water supply', plannedSourceIntegration: ['Seqwater source water updates', 'Seqwater annual water quality data'], dataLabel: SAMPLE },
 ];
 
 export const supplyZones: SupplyZone[] = [
   { id: 'zone-brisbane-inner', authorityId: 'urban-utilities', code: 'UU-BNE-INNER', displayName: 'Brisbane Inner Grid', description: 'Placeholder zone for inner Brisbane suburbs.', dataLabel: SAMPLE },
   { id: 'zone-brisbane-south', authorityId: 'urban-utilities', code: 'UU-BNE-SOUTH', displayName: 'Brisbane South Grid', description: 'Placeholder zone for Brisbane southern suburbs.', dataLabel: SAMPLE },
   { id: 'zone-ipswich-corridor', authorityId: 'urban-utilities', code: 'UU-IPS-COR', displayName: 'Ipswich Corridor', description: 'Placeholder zone for Ipswich and Springfield corridor.', dataLabel: SAMPLE },
-  { id: 'zone-logan-redlands', authorityId: 'logan-water', code: 'LW-LOG-RED', displayName: 'Logan & Redlands Interface', description: 'Placeholder mapped area for Logan/Redlands.', dataLabel: SAMPLE },
+  { id: 'zone-logan-redlands', authorityId: 'urban-utilities', code: 'UU-LOG-RED', displayName: 'Logan & Redlands Interface', description: 'Placeholder mapped area for Logan/Redlands via SEQ network.', dataLabel: SAMPLE },
   { id: 'zone-bay-coast', authorityId: 'unitywater', code: 'UW-BAY-CST', displayName: 'Bay & Coast Zone', description: 'Placeholder zone for Moreton Bay and Sunshine Coast.', dataLabel: SAMPLE },
 ];
 
@@ -53,7 +53,7 @@ export const suburbMappings: LocationAuthorityMapping[] = suburbs.map((suburb) =
   let supplyZoneId = 'zone-brisbane-inner';
 
   if (byLga.includes('Logan') || byLga.includes('Redland')) {
-    authorityId = 'logan-water';
+    authorityId = 'urban-utilities';
     supplyZoneId = 'zone-logan-redlands';
   } else if (byLga.includes('Moreton Bay') || byLga.includes('Sunshine Coast')) {
     authorityId = 'unitywater';
