@@ -239,3 +239,88 @@ Records must not become `publishable` until source, confidence, coverage, and re
 - low-confidence rows can mislead users,
 - QA controls are required for safety and compliance,
 - the app remains beta/sample-protected until sufficient safely reviewed records exist.
+
+## Capturing the first source-backed Brisbane/SEQ records
+
+Use this manual workflow to collect the first 5–10 official Brisbane/SEQ records safely.
+
+### 1) Collect official source data manually
+1. Start with `data/sources/official-source-links.md`.
+2. For Seqwater, Urban Utilities, Unitywater, Queensland Health, and council/source notes, fill in:
+   - official source URL
+   - report/document title
+   - source owner
+   - publication date
+   - last checked date
+   - available parameters
+   - geographic coverage
+   - update cadence
+   - confidence level
+   - reviewer initials
+   - notes
+3. Do not scrape sources. Enter details manually from official documents/pages.
+4. Do not invent values or backfill unknown fields.
+
+### 2) Fill `first-10-records-workbook.csv`
+1. Open `data/examples/first-10-records-workbook.csv`.
+2. Use one row per candidate source-backed record.
+3. Keep placeholders until a reviewer has verified each field from an official source.
+4. Required workbook columns are:
+   - `record_id`
+   - `suburb`
+   - `postcode`
+   - `state`
+   - `water_authority`
+   - `supply_zone`
+   - `parameter_name`
+   - `value_numeric`
+   - `unit`
+   - `source_url`
+   - `publication_date`
+   - `last_checked_date`
+   - `coverage_level`
+   - `confidence_level`
+   - `review_status`
+   - `reviewer_initials`
+   - `reviewer_notes`
+
+### 3) Transfer approved rows into import templates
+After manual verification, copy approved rows from the workbook into the correct template CSVs:
+- source metadata: `data/templates/source_references.csv`
+- freshness/cadence data: `data/templates/source_freshness_cadence.csv`
+- water parameter rows: `data/templates/water_quality_parameters.csv`
+- supporting authority/zone/suburb mappings when needed:
+  - `data/templates/water_authorities.csv`
+  - `data/templates/supply_zones.csv`
+  - `data/templates/suburbs_postcodes.csv`
+
+Log row-level review checks in `data/review/source-verification-log.csv` before promoting any status.
+
+### 4) Run import and validation commands
+Run the Brisbane/SEQ import preview:
+
+```bash
+npm run import:brisbane-seq
+```
+
+Run reviewed-record validation:
+
+```bash
+npm run validate:review-records
+```
+
+Equivalent direct script commands:
+
+```bash
+npm exec tsx scripts/import-brisbane-seq.ts
+npm exec tsx scripts/validate-review-records.ts
+```
+
+### 5) Why records are not publishable until human QA is complete
+Nothing becomes publishable until human QA is complete because this project enforces source traceability, reviewer verification, and controlled status progression (`sample -> imported -> reviewed -> publishable -> published`).
+
+This prevents:
+- publishing unverified values,
+- publishing rows with missing source/date metadata,
+- promoting low-confidence or coverage-unclear records,
+- bypassing mandatory human review controls.
