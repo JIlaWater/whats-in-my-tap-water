@@ -132,3 +132,35 @@ The generated staging preview JSON is written to:
 ### Warning
 This command does **not** scrape live data, does **not** publish records, and must only be used with source-backed CSV data.
 
+
+## Human QA before publishing water data
+
+The Brisbane/SEQ import preview output (`data/staging/brisbane-seq-import.preview.json`) must pass human QA before any imported record can become publishable.
+
+### Review assets
+- QA checklist: `data/review/brisbane-seq-qa-checklist.md`
+- Reviewed records template: `data/review/reviewed-records-template.csv`
+- Rejected records template: `data/review/rejected-records-template.csv`
+- Source verification checklist: `data/review/source-verification-checklist.csv`
+
+### Lifecycle and control points
+Status progression is strictly controlled:
+
+`sample -> imported -> reviewed -> publishable -> published`
+
+Rules enforced by process:
+- Imported records cannot become `reviewed` without human verification.
+- Reviewed records cannot become `publishable` unless source URL, publication date, last checked date, value, unit, coverage level, and confidence level are all present.
+- Low confidence records cannot become `publishable` or `published`.
+- Records with missing source URLs must remain `imported` or be moved to rejected.
+- No records are automatically published.
+
+### Minimum reviewer procedure
+1. Run import preview and inspect `data/staging/brisbane-seq-import.preview.json`.
+2. Verify source metadata and data points row-by-row in `data/review/source-verification-checklist.csv`.
+3. Move successful rows to `data/review/reviewed-records-template.csv` with reviewer/date fields completed.
+4. Move failed rows to `data/review/rejected-records-template.csv` with explicit rejection reasons.
+5. Only after manual approval may records move from `publishable` to `published`.
+
+### Example row policy
+Example rows in review templates are placeholders for Brisbane/SEQ QA workflow demonstration only. They are not official water values and must not be auto-published.

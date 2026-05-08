@@ -1,0 +1,2 @@
+record_id,region,suburb,postcode,parameter_name,value,unit,coverage_level,confidence_level,source_url,publication_date,last_checked_date,reviewer_name,review_date,review_status,review_notes
+example-bris-seq-001,Brisbane/SEQ,Brisbane City,4000,fluoride,0.70,mg/L,suburb,medium,https://example.org/brisbane-seq-source,2026-01-15,2026-05-08,AB,2026-05-08,reviewed,Placeholder example row for QA template only.
