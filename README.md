@@ -365,3 +365,18 @@ This prevents:
 - Every value field must be manually checked against `Seqwater Water Quality Report - Brisbane - 2026-03.pdf` before status changes.
 - Records must remain at `review_status=imported` until human QA is completed and documented.
 - Beta/sample warnings must remain visible while this QA workflow is in progress.
+
+## Manual row-by-row QA from uploaded Seqwater files
+
+Use `data/review/seqwater-uploaded-source-qa-log.csv` and `data/review/brisbane-march-2026-row-by-row-qa.csv` to track manual verification of candidate Brisbane March 2026 rows.
+
+Requirements:
+- Every extracted value must be checked against the uploaded source file in `data/source-files/seqwater/`.
+- Reviewer initials and review date are required before any row can move forward.
+- Imported rows cannot become `reviewed` without explicit human sign-off.
+- No reviewed rows are displayed publicly yet.
+- Beta/sample warnings must remain enabled in the app.
+
+Control reminder:
+- Do not publish data directly from uploaded files.
+- Do not mark rows as reviewed, publishable, or published until manual QA sign-off is complete.
