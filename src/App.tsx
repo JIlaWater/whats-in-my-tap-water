@@ -150,14 +150,14 @@ export const App = () => {
 
   return (
     <main className="layout">
-      <p className="topBanner"><strong>BETA DATA NOTICE</strong> — Some Brisbane records are reviewed source-backed authority-level data. Unsupported suburbs may still show sample placeholders. Not individual household tap testing.</p>
+      <p className="topBanner"><strong>BETA DATA NOTICE</strong> — Reviewed Brisbane authority-level data is available for selected suburbs. Other areas may show sample placeholders. Not individual tap testing.</p>
 
       <header className="hero card">
         <div className="heroContent">
           <div className="heroCopy">
             <h1>What’s Really In Your Tap Water?</h1>
             <p className="subheading">Enter your suburb or postcode for a free plain-English tap water report.</p>
-            <p className="betaNote">Beta preview: reviewed Brisbane authority-level data is being added first. Some suburbs still use sample placeholders while coverage is built.</p>
+            <p className="betaNote">Beta preview: Brisbane authority-level records are being reviewed first. Some suburbs still use sample placeholders while coverage is built.</p>
           </div>
           {showHeroImage ? (
             <figure className="heroMascot">
@@ -214,7 +214,7 @@ export const App = () => {
           ) : (
             <>
               <span className="badge warn">Sample / placeholder data only</span>
-              <span className="badge warn">No {suburb.suburb}-specific source-backed data is currently displayed</span>
+              <span className="badge warn">No suburb-specific source-backed data is currently displayed</span>
               <span className="badge warn">Beta coverage is being built</span>
             </>
           )}
@@ -261,7 +261,7 @@ export const App = () => {
       )}
 
       <footer className="card footer">
-        <p className="footerWarning"><strong>Warning:</strong> This beta report contains sample/placeholder data only. No live water data is currently displayed.</p>
+        <p className="footerWarning"><strong>Warning:</strong> This beta may show reviewed authority-level data for selected Brisbane suburbs and sample placeholders elsewhere. Not live utility data or individual household tap testing.</p>
         <div className="footerLinks">
           <button onClick={() => navigate('/methodology')}>Methodology</button>
           <button onClick={() => navigate('/privacy')}>Privacy & disclaimer</button>
