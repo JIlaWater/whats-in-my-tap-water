@@ -1,13 +1,9 @@
-import type { ConfidenceLevel } from './dataModels';
+import type { Confidence } from './dataModels';
 
-export const shouldIndexPage = (confidence: ConfidenceLevel, hasSubstantialContent: boolean) => {
-  if (!hasSubstantialContent) return false;
-  return confidence === 'High' || confidence === 'Medium';
-};
+export const shouldIndexPage = (confidence: Confidence, hasSubstantialContent: boolean) => hasSubstantialContent && (confidence === 'High' || confidence === 'Medium');
 
-export const buildSeoMeta = (locationLabel: string, confidence: ConfidenceLevel, hasSubstantialContent: boolean) => ({
-  title: `${locationLabel} Tap Water Report | What's In My Tap Water?`,
-  description: `Plain-English ${locationLabel} tap water report based on public authority data with confidence and source transparency.`,
-  canonical: `${'https://whatsinmytapwater.com'}/report/${encodeURIComponent(locationLabel.toLowerCase().replace(/\s+/g, '-'))}`,
+export const buildSeoMeta = (locationLabel: string, confidence: Confidence, hasSubstantialContent: boolean) => ({
+  title: locationLabel === 'Australia' ? "What’s In My Tap Water? Postcode Water Quality Lookup Australia" : `${locationLabel} Tap Water Snapshot | What's In My Tap Water?`,
+  description: 'Enter your suburb or postcode to see a plain-English tap-water snapshot including local water authority, likely source, treatment context, taste and scale watchlist, sources and testing suggestions.',
   robots: shouldIndexPage(confidence, hasSubstantialContent) ? 'index,follow' : 'noindex,follow',
 });
