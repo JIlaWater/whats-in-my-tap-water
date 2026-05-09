@@ -50,6 +50,7 @@ export const App = () => {
   const [query, setQuery] = useState('');
   const [route, setRoute] = useState<Route>(() => getRoute());
   const [heroSrc, setHeroSrc] = useState(HERO_MASCOT_LOCAL);
+  const [showHeroImage, setShowHeroImage] = useState(true);
 
   useEffect(() => {
     const onPop = () => setRoute(getRoute());
@@ -64,6 +65,7 @@ export const App = () => {
       .filter((s) => s.suburb.toLowerCase().includes(q) || s.postcode.includes(q))
       .slice(0, 10);
   }, [query]);
+  const hasSearchNoResults = query.trim().length > 0 && suggestions.length === 0;
   const suggestedSuburbs = useMemo(
     () => SUGGESTED_SUBURB_IDS.map((id) => suburbs.find((s) => s.id === id)).filter((s): s is NonNullable<typeof s> => Boolean(s)),
     [],
@@ -148,24 +150,32 @@ export const App = () => {
 
   return (
     <main className="layout">
-      <p className="topBanner"><strong>{SAMPLE_LABEL}</strong> — This beta shows demo values only (not live utility measurements).</p>
+      <p className="topBanner"><strong>BETA DATA NOTICE</strong> — Some Brisbane records are reviewed source-backed authority-level data. Unsupported suburbs may still show sample placeholders. Not individual household tap testing.</p>
 
       <header className="hero card">
         <div className="heroContent">
           <div className="heroCopy">
             <h1>What’s Really In Your Tap Water?</h1>
             <p className="subheading">Enter your suburb or postcode for a free plain-English tap water report.</p>
-            <p className="betaNote">Beta preview: all suburb metrics, confidence, and freshness values remain sample placeholders.</p>
+            <p className="betaNote">Beta preview: reviewed Brisbane authority-level data is being added first. Some suburbs still use sample placeholders while coverage is built.</p>
           </div>
-          <figure className="heroMascot">
-            <img
-              src={heroSrc}
-              alt="Friendly Australian kangaroo mascot drinking a glass of water with the Australian flag draped over its shoulders."
-              loading="eager"
-              decoding="async"
-              onError={() => setHeroSrc((current) => (current === HERO_MASCOT_LOCAL ? HERO_MASCOT_REMOTE_FALLBACK : current))}
-            />
-          </figure>
+          {showHeroImage ? (
+            <figure className="heroMascot">
+              <img
+                src={heroSrc}
+                alt="Friendly Australian kangaroo mascot drinking a glass of water with the Australian flag draped over its shoulders."
+                loading="eager"
+                decoding="async"
+                onError={() => {
+                  if (heroSrc === HERO_MASCOT_LOCAL) {
+                    setHeroSrc(HERO_MASCOT_REMOTE_FALLBACK);
+                    return;
+                  }
+                  setShowHeroImage(false);
+                }}
+              />
+            </figure>
+          ) : null}
         </div>
       </header>
 
@@ -179,12 +189,14 @@ export const App = () => {
             <p><strong>We don’t have that suburb in the beta dataset yet.</strong></p>
             <p>This beta currently includes selected Brisbane/SEQ suburbs while source-backed coverage is being built.</p>
             <p>No match for “{query.trim()}”. Current report remains <strong>{suburb.suburb}</strong> until you select a suburb below.</p>
+            <p>The report below is your currently selected report, not a match for your search.</p>
             <div className="chips">{suggestedSuburbs.map((s) => <button key={s.id} onClick={() => openReport(s.id)}>{s.suburb} ({s.postcode})</button>)}</div>
           </div>
         )}
       </section>
 
       <section className="card snapshot" aria-label="Tap Water Snapshot">
+        {hasSearchNoResults ? <p className="kicker">Currently selected report</p> : null}
         <p className="kicker">Tap Water Snapshot</p>
         <h2>{suburb.suburb}, {suburb.state} {suburb.postcode}</h2>
         <div className="badges">
