@@ -1,3 +1,4 @@
+import { seqCoverageMap } from './coverageMap';
 import type {
   AustralianSuburb,
   LocationAuthorityMapping,
@@ -9,31 +10,15 @@ import type {
 
 const SAMPLE = 'sample' as const;
 
-export const suburbs: AustralianSuburb[] = [
-  { id: 'au-qld-south-brisbane-4101', suburb: 'South Brisbane', state: 'QLD', postcode: '4101', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
-  { id: 'au-qld-west-end-4101', suburb: 'West End', state: 'QLD', postcode: '4101', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
-  { id: 'au-qld-new-farm-4005', suburb: 'New Farm', state: 'QLD', postcode: '4005', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
-  { id: 'au-qld-chermside-4032', suburb: 'Chermside', state: 'QLD', postcode: '4032', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
-  { id: 'au-qld-indooroopilly-4068', suburb: 'Indooroopilly', state: 'QLD', postcode: '4068', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
-  { id: 'au-qld-carindale-4152', suburb: 'Carindale', state: 'QLD', postcode: '4152', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
-  { id: 'au-qld-ashgrove-4060', suburb: 'Ashgrove', state: 'QLD', postcode: '4060', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
-  { id: 'au-qld-mount-gravatt-4122', suburb: 'Mount Gravatt', state: 'QLD', postcode: '4122', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
-  { id: 'au-qld-sunnybank-4109', suburb: 'Sunnybank', state: 'QLD', postcode: '4109', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
-  { id: 'au-qld-manly-west-4179', suburb: 'Manly West', state: 'QLD', postcode: '4179', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
-  { id: 'au-qld-rocklea-4106', suburb: 'Rocklea', state: 'QLD', postcode: '4106', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
-  { id: 'au-qld-ipswich-4305', suburb: 'Ipswich', state: 'QLD', postcode: '4305', lga: 'Ipswich City', region: 'SEQ', dataLabel: SAMPLE },
-  { id: 'au-qld-springfield-lakes-4300', suburb: 'Springfield Lakes', state: 'QLD', postcode: '4300', lga: 'Ipswich City', region: 'SEQ', dataLabel: SAMPLE },
-  { id: 'au-qld-logan-central-4114', suburb: 'Logan Central', state: 'QLD', postcode: '4114', lga: 'Logan City', region: 'SEQ', dataLabel: SAMPLE },
-  { id: 'au-qld-shailer-park-4128', suburb: 'Shailer Park', state: 'QLD', postcode: '4128', lga: 'Logan City', region: 'SEQ', dataLabel: SAMPLE },
-  { id: 'au-qld-cleveland-4163', suburb: 'Cleveland', state: 'QLD', postcode: '4163', lga: 'Redland City', region: 'SEQ', dataLabel: SAMPLE },
-  { id: 'au-qld-capalaba-4157', suburb: 'Capalaba', state: 'QLD', postcode: '4157', lga: 'Redland City', region: 'SEQ', dataLabel: SAMPLE },
-  { id: 'au-qld-redcliffe-4020', suburb: 'Redcliffe', state: 'QLD', postcode: '4020', lga: 'Moreton Bay', region: 'SEQ', dataLabel: SAMPLE },
-  { id: 'au-qld-caboolture-4510', suburb: 'Caboolture', state: 'QLD', postcode: '4510', lga: 'Moreton Bay', region: 'SEQ', dataLabel: SAMPLE },
-  { id: 'au-qld-north-lakes-4509', suburb: 'North Lakes', state: 'QLD', postcode: '4509', lga: 'Moreton Bay', region: 'SEQ', dataLabel: SAMPLE },
-  { id: 'au-qld-maroochydore-4558', suburb: 'Maroochydore', state: 'QLD', postcode: '4558', lga: 'Sunshine Coast', region: 'SEQ', dataLabel: SAMPLE },
-  { id: 'au-qld-caloundra-4551', suburb: 'Caloundra', state: 'QLD', postcode: '4551', lga: 'Sunshine Coast', region: 'SEQ', dataLabel: SAMPLE },
-  { id: 'au-qld-toowoomba-4350', suburb: 'Toowoomba', state: 'QLD', postcode: '4350', lga: 'Toowoomba Region', region: 'Regional', dataLabel: SAMPLE },
-];
+export const suburbs: AustralianSuburb[] = seqCoverageMap.map((entry) => ({
+  id: `au-qld-${entry.suburb.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${entry.postcode}`,
+  suburb: entry.suburb,
+  state: 'QLD',
+  postcode: entry.postcode,
+  lga: `${entry.region} Region`,
+  region: entry.region === 'Brisbane' ? 'Brisbane' : entry.region === 'Toowoomba' ? 'Regional' : 'SEQ',
+  dataLabel: SAMPLE,
+}));
 
 export const authorities: WaterAuthority[] = [
   { id: 'urban-utilities', name: 'Urban Utilities', serviceArea: 'Brisbane / Ipswich / Lockyer Valley', plannedSourceIntegration: ['Urban Utilities annual reports', 'Seqwater treatment data'], dataLabel: SAMPLE },
@@ -50,25 +35,22 @@ export const supplyZones: SupplyZone[] = [
 ];
 
 export const suburbMappings: LocationAuthorityMapping[] = suburbs.map((suburb) => {
-  const byLga = suburb.lga;
-  let authorityId = 'urban-utilities';
-  let supplyZoneId = 'zone-brisbane-inner';
+  const coverage = seqCoverageMap.find((entry) => entry.suburb === suburb.suburb && entry.postcode === suburb.postcode);
+  const authorityId = coverage?.waterAuthority === 'Unitywater'
+    ? 'unitywater'
+    : coverage?.waterAuthority === 'Seqwater'
+      ? 'seqwater'
+      : 'urban-utilities';
 
-  if (byLga.includes('Logan') || byLga.includes('Redland')) {
-    authorityId = 'urban-utilities';
-    supplyZoneId = 'zone-logan-redlands';
-  } else if (byLga.includes('Moreton Bay') || byLga.includes('Sunshine Coast')) {
-    authorityId = 'unitywater';
-    supplyZoneId = 'zone-bay-coast';
-  } else if (byLga.includes('Ipswich')) {
-    authorityId = 'urban-utilities';
-    supplyZoneId = 'zone-ipswich-corridor';
-  } else if (suburb.suburb === 'Sunnybank' || suburb.suburb === 'Mount Gravatt' || suburb.suburb === 'Carindale') {
-    supplyZoneId = 'zone-brisbane-south';
-  }
+  const supplyZoneId = authorityId === 'unitywater'
+    ? 'zone-bay-coast'
+    : suburb.region === 'Brisbane'
+      ? 'zone-brisbane-inner'
+      : 'zone-logan-redlands';
 
   return { suburbId: suburb.id, authorityId, supplyZoneId, mappingLabel: SAMPLE };
 });
+
 
 const commonFreshness: SourceFreshness = {
   sourceName: 'Sample placeholder ETL batch',

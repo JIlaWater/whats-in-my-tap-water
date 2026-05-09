@@ -3,7 +3,7 @@
 ## Project overview
 WhatsInMyTapWater.com is an MVP web app foundation for showing suburb-level tap water summaries and guiding users toward relevant actions.
 
-This current version intentionally uses **placeholder/sample data only** and does **not** connect to live utility feeds.
+This beta includes **reviewed source-backed authority-level data** for selected Brisbane and Moreton suburbs, with sample placeholders elsewhere while SEQ coverage is expanded. It does **not** connect to live utility feeds.
 
 ## Production-safety notice
 - All displayed water values are explicitly sample/placeholder data.
