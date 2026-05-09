@@ -28,6 +28,7 @@ export const suburbs: AustralianSuburb[] = [
   { id: 'au-qld-cleveland-4163', suburb: 'Cleveland', state: 'QLD', postcode: '4163', lga: 'Redland City', region: 'SEQ', dataLabel: SAMPLE },
   { id: 'au-qld-capalaba-4157', suburb: 'Capalaba', state: 'QLD', postcode: '4157', lga: 'Redland City', region: 'SEQ', dataLabel: SAMPLE },
   { id: 'au-qld-redcliffe-4020', suburb: 'Redcliffe', state: 'QLD', postcode: '4020', lga: 'Moreton Bay', region: 'SEQ', dataLabel: SAMPLE },
+  { id: 'au-qld-caboolture-4510', suburb: 'Caboolture', state: 'QLD', postcode: '4510', lga: 'Moreton Bay', region: 'SEQ', dataLabel: SAMPLE },
   { id: 'au-qld-north-lakes-4509', suburb: 'North Lakes', state: 'QLD', postcode: '4509', lga: 'Moreton Bay', region: 'SEQ', dataLabel: SAMPLE },
   { id: 'au-qld-maroochydore-4558', suburb: 'Maroochydore', state: 'QLD', postcode: '4558', lga: 'Sunshine Coast', region: 'SEQ', dataLabel: SAMPLE },
   { id: 'au-qld-caloundra-4551', suburb: 'Caloundra', state: 'QLD', postcode: '4551', lga: 'Sunshine Coast', region: 'SEQ', dataLabel: SAMPLE },
