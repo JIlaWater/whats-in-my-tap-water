@@ -20,6 +20,7 @@ export const suburbs: AustralianSuburb[] = [
   { id: 'au-qld-mount-gravatt-4122', suburb: 'Mount Gravatt', state: 'QLD', postcode: '4122', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
   { id: 'au-qld-sunnybank-4109', suburb: 'Sunnybank', state: 'QLD', postcode: '4109', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
   { id: 'au-qld-manly-west-4179', suburb: 'Manly West', state: 'QLD', postcode: '4179', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
+  { id: 'au-qld-rocklea-4106', suburb: 'Rocklea', state: 'QLD', postcode: '4106', lga: 'Brisbane City', region: 'Brisbane', dataLabel: SAMPLE },
   { id: 'au-qld-ipswich-4305', suburb: 'Ipswich', state: 'QLD', postcode: '4305', lga: 'Ipswich City', region: 'SEQ', dataLabel: SAMPLE },
   { id: 'au-qld-springfield-lakes-4300', suburb: 'Springfield Lakes', state: 'QLD', postcode: '4300', lga: 'Ipswich City', region: 'SEQ', dataLabel: SAMPLE },
   { id: 'au-qld-logan-central-4114', suburb: 'Logan Central', state: 'QLD', postcode: '4114', lga: 'Logan City', region: 'SEQ', dataLabel: SAMPLE },
