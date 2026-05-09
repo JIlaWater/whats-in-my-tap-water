@@ -8,11 +8,19 @@ const cta = 'https://jilawater.com.au/free-home-water-assessment/?utm_source=wha
 export function App() {
   const [query, setQuery] = useState('');
   const [submitted, setSubmitted] = useState('');
+  const [isSuggestionsOpen, setSuggestionsOpen] = useState(false);
   useEffect(() => {
     const suburb = new URLSearchParams(window.location.search).get('suburb');
     if (suburb) { setQuery(suburb); setSubmitted(suburb); }
   }, []);
   const match = useMemo(() => lookup(submitted), [submitted]);
+  const suggestions = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+    if (normalized.length < 2) return [];
+    return seqSearchIndex
+      .filter((entry) => entry.suburb.toLowerCase().includes(normalized) || entry.postcode.includes(normalized))
+      .slice(0, 8);
+  }, [query]);
   const onSubmit = (e: FormEvent) => { e.preventDefault(); setSubmitted(query); };
 
   const renderSingle = (entry: (typeof seqSearchIndex)[number]) => {
@@ -36,7 +44,22 @@ export function App() {
   };
 
   return <main className='wrap'><h1>What’s In My Tap Water?</h1><p>Enter your suburb or postcode to get a local tap water snapshot based on regional water-supply context, public guidance and practical household filtration advice.</p>
-    <form onSubmit={onSubmit}><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder='Try Morningside, 4170, Robina, Ipswich, Caloundra…' /><button>Check My Tap Water</button><a href='https://jilawater.com.au/free-home-water-assessment/'>Book a Free Home Water Assessment</a></form>
+    <form onSubmit={onSubmit}>
+      <div className='searchBox'>
+        <input
+          value={query}
+          onChange={(e) => { setQuery(e.target.value); setSuggestionsOpen(true); }}
+          onFocus={() => setSuggestionsOpen(true)}
+          onBlur={() => window.setTimeout(() => setSuggestionsOpen(false), 120)}
+          placeholder='Try Morningside, 4170, Robina, Ipswich, Caloundra…'
+          aria-label='Search by suburb or postcode'
+        />
+        {isSuggestionsOpen && suggestions.length > 0 && <ul className='suggestions' role='listbox' aria-label='Search suggestions'>
+          {suggestions.map((item) => <li key={`${item.suburb}-${item.postcode}`}><button type='button' onClick={() => { setQuery(item.suburb); setSubmitted(item.suburb); setSuggestionsOpen(false); }}>{item.suburb} ({item.postcode})</button></li>)}
+        </ul>}
+      </div>
+      <button>Check My Tap Water</button><a href='https://jilawater.com.au/free-home-water-assessment/'>Book a Free Home Water Assessment</a>
+    </form>
     <p className='muted'>Built for South East Queensland households. Regional guidance only. Property-level testing recommended for certainty.</p>
     {match.type === 'single' && renderSingle(match.entry)}
     {match.type === 'postcode_multiple' && <section className='card'><h2>Postcode {match.postcode} covers multiple nearby suburbs. Choose one below.</h2><div className='row'>{match.entries.map((e) => <button key={e.suburb} onClick={() => { setQuery(e.suburb); setSubmitted(e.suburb); }}>{e.suburb}</button>)}</div></section>}
