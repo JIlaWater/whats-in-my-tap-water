@@ -55,7 +55,7 @@ export const App = () => {
       .slice(0, 10);
   }, [query]);
 
-  const activeSuburbId = route.type === 'report' ? route.suburbId : suggestions[0]?.id ?? suburbs[0]?.id;
+  const activeSuburbId = route.type === 'report' ? route.suburbId : suburbs[0]?.id;
   const suburb = suburbs.find((s) => s.id === activeSuburbId);
   const mapping = suburbMappings.find((m) => m.suburbId === activeSuburbId);
   const authority = authorities.find((a) => a.id === mapping?.authorityId);
@@ -152,7 +152,15 @@ export const App = () => {
       <section className="searchPanel card">
         <h2>Search suburb or postcode</h2>
         <input placeholder="Try South Brisbane or 4101" value={query} onChange={(e) => setQuery(e.target.value)} />
-        <div className="chips">{suggestions.map((s) => <button key={s.id} onClick={() => openReport(s.id)}>{s.suburb} ({s.postcode})</button>)}</div>
+        {suggestions.length > 0 ? (
+          <div className="chips">{suggestions.map((s) => <button key={s.id} onClick={() => openReport(s.id)}>{s.suburb} ({s.postcode})</button>)}</div>
+        ) : (
+          <div className="searchNoResults">
+            <p><strong>We don’t have that suburb in the beta dataset yet.</strong></p>
+            <p>This beta currently includes a small set of Brisbane/SEQ suburbs while source-backed coverage is being built.</p>
+            <p>Try South Brisbane, New Farm, West End or Carindale</p>
+          </div>
+        )}
       </section>
 
       <section className="card snapshot" aria-label="Tap Water Snapshot">
@@ -163,8 +171,16 @@ export const App = () => {
           <span className="badge trust">Zone: {supplyZone.displayName}</span>
           <span className="badge">Confidence: {report.confidence.level} ({report.confidence.scoreOutOf100}/100)</span>
           <span className="badge">Freshness: {report.sourceFreshness.staleness}</span>
-          <span className="badge warn">{SAMPLE_LABEL}</span>
-          {hasReviewedRecords ? <span className="badge trust">Reviewed source-backed data</span> : null}
+          {hasReviewedRecords ? (
+            <>
+              <span className="badge trust">Reviewed source-backed data</span>
+              <span className="badge trust">Coverage: Brisbane authority-level</span>
+              <span className="badge">Confidence: medium</span>
+              <span className="badge warn">Not individual tap testing</span>
+            </>
+          ) : (
+            <span className="badge warn">{SAMPLE_LABEL}</span>
+          )}
         </div>
         {hasReviewedRecords ? (
           <>
