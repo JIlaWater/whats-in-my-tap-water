@@ -350,3 +350,11 @@ This prevents:
 - publishing rows with missing source/date metadata,
 - promoting low-confidence or coverage-unclear records,
 - bypassing mandatory human review controls.
+
+## First Brisbane March 2026 candidate records
+
+- These rows are **imported candidates only** in `data/imports/brisbane-march-2026-candidate-records.csv`.
+- They are **not live public data** and must not be treated as publishable.
+- Every value field must be manually checked against `Seqwater Water Quality Report - Brisbane - 2026-03.pdf` before status changes.
+- Records must remain at `review_status=imported` until human QA is completed and documented.
+- Beta/sample warnings must remain visible while this QA workflow is in progress.
