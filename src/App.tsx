@@ -223,22 +223,23 @@ export const App = () => {
           <>
             <p><strong>Source:</strong> Seqwater Brisbane Monthly Water Quality Report — March 2026</p>
             <p><em>Authority-level monthly data, not a test from your individual tap.</em></p>
-            <details>
-              <summary><strong>Source details (reviewed)</strong></summary>
-              <ul>
-                <li><strong>Source title:</strong> Seqwater Brisbane Monthly Water Quality Report — March 2026</li>
-                <li><strong>Source owner:</strong> {reviewedRecords[0].source_owner}</li>
-                <li><strong>Source type:</strong> downloadable_pdf</li>
-                <li><strong>Local source file path:</strong> {reviewedRecords[0].local_source_file_path}</li>
-                <li><strong>Report month:</strong> {reviewedRecords[0].report_month}</li>
-                <li><strong>Coverage level:</strong> {reviewedRecords[0].coverage_level}</li>
-                <li><strong>Confidence level:</strong> {reviewedRecords[0].confidence_level}</li>
-                <li><strong>Review status:</strong> {reviewedRecords[0].review_status}</li>
-                <li><strong>Reviewer initials:</strong> {reviewedRecords[0].reviewer_initials}</li>
-                <li><strong>Review date:</strong> {reviewedRecords[0].review_date}</li>
-                <li><strong>Source files reference:</strong> <code>data/source-files/seqwater/</code></li>
-              </ul>
-              <p><em>Authority-level monthly water quality data. Not a sample from your individual household tap.</em></p>
+            <details className="sourceDetails">
+              <summary><strong>Source details</strong></summary>
+              <div className="sourceDetailsCard">
+                <ul>
+                  <li><strong>Source:</strong> Seqwater Brisbane Monthly Water Quality Report — March 2026</li>
+                  <li><strong>Source owner:</strong> Seqwater</li>
+                  <li><strong>Source type:</strong> downloadable_pdf</li>
+                  <li><strong>Report month:</strong> March 2026</li>
+                  <li><strong>Coverage level:</strong> Brisbane authority-level</li>
+                  <li><strong>Confidence level:</strong> medium</li>
+                  <li><strong>Review status:</strong> reviewed</li>
+                  <li><strong>Reviewer initials:</strong> JG</li>
+                  <li><strong>Review date:</strong> 2026-05-09</li>
+                  <li><strong>Source file:</strong> <code>data/source-files/seqwater/Seqwater Water Quality Report - Brisbane - 2026-03.pdf</code></li>
+                </ul>
+                <p><em>Authority-level monthly water quality data. Not a test from your individual household tap.</em></p>
+              </div>
             </details>
             <ul>{reviewedRecords.map((record) => <li key={record.record_id}><strong>{record.parameter_name}:</strong> min {record.min_value}, avg {record.average_value}, max {record.max_value} {record.unit} (samples: {record.number_of_samples})</li>)}</ul>
           </>
@@ -261,7 +262,7 @@ export const App = () => {
       )}
 
       <footer className="card footer">
-        <p className="footerWarning"><strong>Warning:</strong> This beta report contains sample/placeholder data only. No live water data is currently displayed.</p>
+        <p className="footerWarning"><strong>Warning:</strong> This beta may show reviewed authority-level data for selected Brisbane suburbs and sample placeholders elsewhere. Not live utility data or individual household tap testing.</p>
         <div className="footerLinks">
           <button onClick={() => navigate('/methodology')}>Methodology</button>
           <button onClick={() => navigate('/privacy')}>Privacy & disclaimer</button>

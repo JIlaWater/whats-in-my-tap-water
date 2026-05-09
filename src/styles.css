@@ -121,6 +121,27 @@ button {
 
 .snapshot ul { padding-left: 1.1rem; margin-bottom: 0.2rem; }
 .snapshot li { margin-bottom: 0.35rem; }
+.sourceDetails {
+  margin: 0.85rem 0 0.25rem;
+}
+.sourceDetails summary {
+  cursor: pointer;
+  color: #0f4b7a;
+}
+.sourceDetailsCard {
+  margin-top: 0.55rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid #bfdbfe;
+  border-radius: 0.65rem;
+  background: #f8fbff;
+}
+.sourceDetailsCard ul {
+  margin: 0;
+}
+.sourceDetailsCard p {
+  margin: 0.6rem 0 0;
+  color: #1e3a8a;
+}
 
 .ctaCard h3 { margin-top: 0; }
 .cta {
