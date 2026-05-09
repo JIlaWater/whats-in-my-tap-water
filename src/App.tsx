@@ -1,41 +1,45 @@
-import { FormEvent, useMemo, useState } from 'react';
-import { locationProfiles, reviewedChips } from './seedData';
-import type { LocationProfile } from './dataModels';
-import { searchProfiles } from './search';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { seqSearchIndex } from './data/seqSearchIndex';
+import { profileBySlug } from './data/waterProfiles';
+import { lookup } from './search';
 
-const comparison = ['Brisbane CBD', 'South Brisbane', 'West End', 'Caboolture', 'Ipswich', 'Gold Coast', 'Redlands / Bayside', 'Logan', 'Sunshine Coast'];
-
-const Snapshot = ({ profile }: { profile: LocationProfile }) => {
-  const citation = `${profile.suburb} snapshot generated from public authority records and official guidance. Last checked ${profile.lastChecked}.`;
-  return <section className='card snapshot'>
-    <h2>{profile.suburb} Tap Water Snapshot</h2>
-    <p className='subheading'>Source-backed regional guidance for {profile.suburb}, QLD {profile.postcode}.</p>
-    <div className='scoreGrid'>{[['Provider / authority', `${profile.providerName} • ${profile.waterAuthority}`], ['Coverage level', profile.coverageLevel], ['Confidence', profile.confidence], ['Taste & odour watchlist', profile.tasteOdourCategory], ['Scale comfort watchlist', profile.scaleRiskCategory], ['Property testing recommended', 'Yes']].map(([k, v]) => <article key={k}><p>{k}</p><strong>{v}</strong></article>)}</div>
-    <h3>Household Comfort Watchlist</h3><div className='watchGrid'>{profile.householdComfortWatchlist.map((w) => <article key={w.label}><h4>{w.label}</h4><span className='badge'>{w.level}</span><p>{w.note}</p></article>)}</div>
-    <h3>What locals may notice</h3><ul>{profile.whatLocalsMayNotice.map((i) => <li key={i}>{i}</li>)}</ul>
-    <h3>What to test at home</h3><ul>{profile.whatToTestAtHome.map((i) => <li key={i}>☑ {i}</li>)}</ul>
-    <h3>Filter pathway suggestions</h3><div className='watchGrid'>{profile.recommendedFiltrationPathways.map((i) => <article key={i}><p>{i}</p></article>)}</div>
-    <p className='muted'>General guidance only. Confirm with property-specific testing before choosing a system.</p>
-    <h3>Source cards</h3><div className='watchGrid'>{profile.sources.map((s) => <article key={s.title}><h4>{s.humanLabel}</h4><p>{s.title}</p><p>{s.publisher}</p><p>{s.publicationDate ?? 'Date under review'}</p><p>Coverage: {s.coverageLevel} • Confidence: {s.confidence}</p>{s.url ? <a href={s.url} target='_blank' rel='noreferrer'>View source</a> : <p>Link unavailable</p>}</article>)}</div>
-    <h3>Share this report</h3><div className='chips'><button type='button' onClick={() => navigator.clipboard.writeText(profile.shareSummary)}>Copy suburb summary</button><button type='button' onClick={() => navigator.clipboard.writeText(profile.socialPost)}>Copy social post</button><button type='button' onClick={() => window.print()}>Print / save report</button><button type='button' onClick={() => navigator.clipboard.writeText(citation)}>Copy citation</button></div>
-  </section>;
-};
+const cta = 'https://jilawater.com.au/free-home-water-assessment/?utm_source=whatsinmytapwater&utm_medium=lookup_tool&utm_campaign=seq_tap_water_lookup&utm_content=result_cta';
 
 export function App() {
   const [query, setQuery] = useState('');
   const [submitted, setSubmitted] = useState('');
-  const result = useMemo(() => searchProfiles(submitted), [submitted]);
-  const primary = result.profiles[0];
-
+  useEffect(() => {
+    const suburb = new URLSearchParams(window.location.search).get('suburb');
+    if (suburb) { setQuery(suburb); setSubmitted(suburb); }
+  }, []);
+  const match = useMemo(() => lookup(submitted), [submitted]);
   const onSubmit = (e: FormEvent) => { e.preventDefault(); setSubmitted(query); };
 
-  return <main className='layout'>
-    <section className='betaBanner'>Built from public water authority data, official guidance and source-backed regional records. General guidance only — not a household lab test.</section>
-    <section className='card hero'><h1>What’s Really In Your Tap Water?</h1><p className='subheading'>Enter your suburb or postcode to see your local water authority, likely source, taste and scale watchlist, treatment context and what to test at your own tap.</p><form className='searchForm' onSubmit={onSubmit}><div className='searchRow'><input placeholder='Enter suburb or postcode' value={query} onChange={(e) => setQuery(e.target.value)} /><button className='primaryButton'>Check My Tap Water</button></div></form><p className='chipLabel'>Reviewed suburbs</p><div className='chips'>{reviewedChips.map((c) => <button key={c} type='button' onClick={() => { setQuery(c); setSubmitted(c); }}>{c}</button>)}</div></section>
-    {result.status === 'single' && primary && <Snapshot profile={primary} />}
-    {result.status === 'multiple' && <section className='card'><h2>Multiple matches for “{submitted}”</h2><p>Choose your local snapshot:</p><div className='chips'>{result.profiles.map((p) => <button key={p.id} onClick={() => { setQuery(p.suburb); setSubmitted(p.suburb); }}>{p.suburb} {p.postcode}</button>)}</div></section>}
-    {result.status === 'unknown' && <section className='card'><h2>We could not verify an exact local match yet</h2><p>We never show an unrelated suburb report. Try a nearby reviewed area or request review for “{submitted}”.</p>{result.suggestions.length > 0 && <p>Did you mean: {result.suggestions.join(', ')}?</p>}<h3>Useful fallback: what to test at home</h3><ul><li>Chlorine/chloramine</li><li>Hardness</li><li>pH and TDS</li><li>Sediment/turbidity</li><li>Taste/odour notes</li><li>Plumbing age and pipe material</li></ul></section>}
-    <section className='card'><h3>How your area compares</h3><div className='coverageGrid'>{comparison.map((name) => { const p = locationProfiles.find((x) => x.suburb === name); if (!p) return null; return <article key={p.id}><h4>{p.suburb}</h4><p>Taste/odour: {p.tasteOdourCategory}</p><p>Scale comfort: {p.scaleRiskCategory}</p><p>Source confidence: {p.confidence}</p><p>Review status: {p.reviewStatus}</p></article>; })}</div></section>
-    <section className='card ctaCard'><h3>Want certainty at your own tap?</h3><p>For Brisbane and SE QLD households, Jila Water can test your actual home tap water and recommend the right whole-home filtration option based on your property, plumbing and concerns.</p><a className='cta' href='https://jilawater.com.au/free-home-water-assessment/' target='_blank' rel='noreferrer'>Book a Free Home Water Assessment</a></section>
+  const renderSingle = (entry: (typeof seqSearchIndex)[number]) => {
+    const p = profileBySlug[entry.matchedProfileSlug] ?? profileBySlug['seq-fallback-regional'];
+    const shareUrl = `${window.location.origin}${window.location.pathname}?suburb=${encodeURIComponent(entry.suburb)}`;
+    const summary = `I checked what may be affecting tap water in ${entry.suburb}. Here’s the local snapshot.`;
+    return <section className='card'>
+      <p className='label'>{entry.profileType === 'suburb_specific' ? 'Detailed suburb snapshot' : 'Regional guidance snapshot'}</p>
+      <h2>{entry.suburb} Tap Water Snapshot</h2>
+      <p>{entry.profileType === 'suburb_specific' ? 'This snapshot is based on suburb-specific guidance and regional supply context.' : `Regional guidance based on ${entry.regionGroup} / SEQ supply context.`}</p>
+      {entry.profileType !== 'suburb_specific' && <p className='muted'>We haven’t created a suburb-specific source page for {entry.suburb} yet, so this report uses the most relevant regional guidance profile. Property-level testing is recommended for certainty.</p>}
+      <p><strong>Confidence:</strong> {p.confidenceLabel} • <strong>Coverage:</strong> {p.coverageLabel} • <strong>Freshness:</strong> {p.freshnessLabel}</p>
+      <h3>Likely water-quality themes</h3><ul>{p.commonConcerns.map((x) => <li key={x}>{x}</li>)}</ul>
+      <h3>What homeowners commonly notice</h3><ul>{p.likelyNoticeableIssues.map((x) => <li key={x}>{x}</li>)}</ul>
+      <h3>What this does and does not mean</h3><ul><li>This is guidance, not a lab result.</li><li>Your property’s plumbing, pipe age, fixtures and storage conditions can affect final tap water.</li><li>Testing is recommended for certainty.</li></ul>
+      <h3>Practical next steps</h3><ul>{p.recommendedTesting.map((x) => <li key={x}>{x}</li>)}</ul>
+      <div className='share'><strong>Share</strong><div className='row'><button onClick={() => navigator.clipboard.writeText(shareUrl)}>Copy result link</button><button onClick={() => navigator.clipboard.writeText(summary)}>Copy summary</button><a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}>Facebook</a><a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(summary)}&url=${encodeURIComponent(shareUrl)}`}>X/Twitter</a><a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}>LinkedIn</a><a href={`mailto:?subject=${encodeURIComponent(entry.suburb + ' Tap Water Snapshot')}&body=${encodeURIComponent(summary + ' ' + shareUrl)}`}>Email</a></div></div>
+      <div className='cta'><h3>Want to know what’s really coming through your taps?</h3><p>Jila Water can test your home’s water and recommend the right whole home filtration setup for your property.</p><a href={cta}>Book My Free Home Water Assessment</a></div>
+      <details><summary>Source notes</summary><ul>{p.sourceNotes.map((s) => <li key={s}>{s}</li>)}</ul></details>
+    </section>;
+  };
+
+  return <main className='wrap'><h1>What’s In My Tap Water?</h1><p>Enter your suburb or postcode to get a local tap water snapshot based on regional water-supply context, public guidance and practical household filtration advice.</p>
+    <form onSubmit={onSubmit}><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder='Try Morningside, 4170, Robina, Ipswich, Caloundra…' /><button>Check My Tap Water</button><a href='https://jilawater.com.au/free-home-water-assessment/'>Book a Free Home Water Assessment</a></form>
+    <p className='muted'>Built for South East Queensland households. Regional guidance only. Property-level testing recommended for certainty.</p>
+    {match.type === 'single' && renderSingle(match.entry)}
+    {match.type === 'postcode_multiple' && <section className='card'><h2>Postcode {match.postcode} covers multiple nearby suburbs. Choose one below.</h2><div className='row'>{match.entries.map((e) => <button key={e.suburb} onClick={() => { setQuery(e.suburb); setSubmitted(e.suburb); }}>{e.suburb}</button>)}</div></section>}
+    {match.type === 'unknown' && <section className='card'><h2>We don’t have a SEQ water snapshot for that location yet.</h2><p>This tool currently focuses on South East Queensland, from the Sunshine Coast and Noosa through Brisbane, Ipswich, Logan, the Gold Coast, Lockyer Valley and Toowoomba.</p><p>Try searching a suburb like Morningside, Robina, Ipswich, Caloundra or Toowoomba.</p>{match.suggestions.length > 0 && <p>Did you mean one of these? {match.suggestions.map((s) => s.suburb).join(', ')}</p>}<a href='https://jilawater.com.au/free-home-water-assessment/'>Book a Free Water Assessment</a></section>}
   </main>;
 }

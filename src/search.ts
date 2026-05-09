@@ -1,17 +1,34 @@
-import type { SearchResult } from './dataModels';
-import { locationProfiles } from './seedData';
+import { seqSearchIndex } from './data/seqSearchIndex';
+import type { MatchResult, SearchIndexEntry } from './dataModels';
 
-const normalize = (v: string) => v.trim().toLowerCase();
-const distance1 = (a: string, b: string) => Math.abs(a.length - b.length) <= 1 && [...a].filter((ch, i) => ch !== b[i]).length <= 2;
+const normalize = (s: string) => s.toLowerCase().trim().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ');
+const ns = (s: string) => normalize(s).replace(/\s/g, '');
+const dist = (a: string, b: string) => Math.abs(a.length - b.length) + [...a].filter((c, i) => c !== b[i]).length;
 
-export const searchProfiles = (query: string): SearchResult => {
+export function lookup(query: string): MatchResult {
   const q = normalize(query);
-  if (!q) return { query, status: 'empty', matchedType: 'none', profiles: [], suggestions: [] };
-  const exact = locationProfiles.filter((p) => p.postcode === q || normalize(p.suburb) === q || p.aliases.some((a) => normalize(a) === q));
-  if (exact.length) return { query, status: exact.length > 1 ? 'multiple' : 'single', matchedType: 'suburb', profiles: exact, suggestions: [] };
-  const partial = locationProfiles.filter((p) => normalize(p.suburb).includes(q) || p.aliases.some((a) => normalize(a).includes(q)));
-  if (partial.length) return { query, status: partial.length > 1 ? 'multiple' : 'single', matchedType: 'partial', profiles: partial, suggestions: [] };
-  const fuzzy = locationProfiles.filter((p) => distance1(normalize(p.suburb), q) || p.aliases.some((a) => distance1(normalize(a), q) || normalize(a).startsWith(q) || q.startsWith(normalize(a).slice(0, 4))));
-  if (fuzzy.length) return { query, status: 'unknown', matchedType: 'fuzzy', profiles: [], suggestions: fuzzy.map((p) => p.suburb) };
-  return { query, status: 'unknown', matchedType: 'none', profiles: [], suggestions: [] };
-};
+  if (!q) return { type: 'unknown', suggestions: [] };
+  if (/^\d{4}$/.test(q)) {
+    const entries = seqSearchIndex.filter((e) => e.postcode === q);
+    if (entries.length === 1) return { type: 'single', entry: entries[0] };
+    if (entries.length > 1) return { type: 'postcode_multiple', postcode: q, entries };
+    return { type: 'unknown', suggestions: [] };
+  }
+  const exact = seqSearchIndex.find((e) => [e.suburb, ...e.aliases, e.regionGroup].some((v) => normalize(v) === q));
+  if (exact) return { type: 'single', entry: exact };
+
+  const partial = seqSearchIndex.filter((e) => [e.suburb, ...e.aliases, e.regionGroup].some((v) => normalize(v).includes(q) || ns(v).includes(ns(q))));
+  if (partial.length === 1) return { type: 'single', entry: partial[0] };
+
+  const fuzzy = seqSearchIndex
+    .map((e) => ({ e, score: Math.min(...[e.suburb, ...e.aliases].map((v) => dist(normalize(v), q))) }))
+    .filter((x) => x.score <= 3)
+    .sort((a, b) => a.score - b.score || b.e.searchPriority - a.e.searchPriority)
+    .map((x) => x.e);
+
+  return { type: 'unknown', suggestions: dedupeBySuburb(partial.length ? partial : fuzzy).slice(0, 5) };
+}
+
+function dedupeBySuburb(items: SearchIndexEntry[]) {
+  return items.filter((x, i, arr) => arr.findIndex((y) => y.suburb === x.suburb) === i);
+}
