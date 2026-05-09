@@ -395,9 +395,9 @@ Control reminder:
 
 ## Moreton March 2026 candidate records
 
-- Moreton March 2026 rows are imported candidates only.
-- They are not reviewed yet.
-- Blank value rows must remain imported.
-- Do not create reviewed rows until values, units, sample counts and source pages are manually checked.
+- Moreton March 2026 rows that were manually checked are now in reviewed draft status only.
+- Any Moreton rows missing checked values must remain imported and need follow-up.
 - No Moreton values are public yet.
 - No Moreton records may become publishable or published until manual verification is complete.
+
+Moreton March 2026 rows have been manually checked and moved to reviewed draft status only. They are not publishable or published.
