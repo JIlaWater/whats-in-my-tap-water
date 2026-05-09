@@ -410,6 +410,10 @@ Moreton March 2026 rows have been manually checked and moved to reviewed draft s
 - Displayed data is authority/report-zone level monthly reporting and is not individual household tap testing.
 
 
+## Gold Coast March 2026 review note
+
+Gold Coast March 2026 rows have been moved to reviewed draft status only where checked values were present. They are not publishable or published.
+
 ## Regional March 2026 batch: Gold Coast, Logan, Redland, Scenic Rim and Somerset
 
 - This regional batch is **imported only** and is staged for manual QA.
