@@ -5,6 +5,16 @@ import { buildSeoMeta } from './seo';
 
 const normalise = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9\s]/g, '');
 
+const sourceTypeLabel: Record<string, string> = {
+  pdf_report: 'Official water authority report',
+  guideline: 'Government drinking water guidance',
+  health_advisory: 'Public health guidance',
+  regional_dataset: 'Regional water quality source',
+  under_review: 'Source under review'
+};
+
+const formatSourceType = (sourceType: string) => sourceTypeLabel[sourceType] ?? 'Source under review';
+
 const levenshtein = (a: string, b: string) => {
   const dp = Array.from({ length: a.length + 1 }, () => Array<number>(b.length + 1).fill(0));
   for (let i = 0; i <= a.length; i += 1) dp[i][0] = i;
@@ -107,49 +117,57 @@ export const App = () => {
         <span className='badge'>Coverage: {profile.coverage}</span>
         <span className='badge'>Freshness: {profile.freshness}</span>
       </div>
-      <p><strong>Source-backed status:</strong> {hasEnoughSourceMetadata ? 'Available with authority-level references' : 'Review pending for full source metadata'}</p>
+      <p className='sectionBlock'><strong>Source-backed status:</strong> {hasEnoughSourceMetadata ? 'Available with authority-level references' : 'Review pending for full source metadata'}</p>
       <h3>What we know</h3>
       <p>{profile.summary}</p>
       <ul>{profile.likelySymptoms.map((s) => <li key={s}>{s}</li>)}</ul>
+      <hr className='sectionDivider' />
       <h3>What we’re still reviewing</h3>
       <ul>
         <li>Verified suburb-level public data is not available yet.</li>
         <li>Regional source currently under review.</li>
         <li>Household testing required for property-specific result.</li>
       </ul>
+      <hr className='sectionDivider' />
       <h3>Source summary</h3>
-      <ul>{sourceRows.map((s) => <li key={s.id}>{s.sourceName} • {s.sourceType} • Published {s.publicationDate} • Coverage {s.coverageLevel} • Confidence {s.confidence} • Freshness {s.freshnessLabel}</li>)}</ul>
+      <ul>{sourceRows.map((s) => <li key={s.id}>{s.sourceName} • {formatSourceType(s.sourceType)} • Published {s.publicationDate} • Coverage {s.coverageLevel} • Confidence {s.confidence} • Freshness {s.freshnessLabel}</li>)}</ul>
+      <hr className='sectionDivider' />
       <p className='footerWarning'>This report uses public authority-level information where available. It is general guidance only and is not a replacement for property-specific tap-water testing.</p>
     </section>}
 
     {isKnownButPending && resolvedSuburb && <section className='card'>
-      <h2>Looks like we haven’t reviewed this suburb yet.</h2>
+      <h2>We haven’t reviewed this suburb yet.</h2>
       <p>We’re adding source-backed suburb and regional reports in stages. You can request this suburb and we’ll prioritise it for review.</p>
       <p><strong>Requested suburb:</strong> {resolvedSuburb.suburb}, QLD {resolvedSuburb.postcode}</p>
       <p>Not enough verified suburb-level public data yet.</p>
     </section>}
 
     {isUnknownSearch && <section className='card'>
-      <h2>Looks like we haven’t reviewed this suburb yet.</h2>
+      <h2>We haven’t reviewed this suburb yet.</h2>
       <p>We’re adding source-backed suburb and regional reports in stages. You can request this suburb and we’ll prioritise it for review.</p>
       <p>Source-backed value not yet available.</p>
     </section>}
 
     {(isKnownButPending || isUnknownSearch) && <section className='card'>
-      <h3>Request this suburb for review</h3>
+      <h3>Looking for your suburb?</h3>
+      <p>We’re reviewing suburb and regional reports in stages. Request your suburb and we’ll prioritise it for manual source review.</p>
+    </section>}
+
+    {(isKnownButPending || isUnknownSearch) && <section className='card'>
+      <h3>Request suburb review</h3>
       <form className='requestForm'>
         <label>Suburb<input defaultValue={submittedQuery} /></label>
         <label>Postcode (optional)<input /></label>
         <label>Email for updates (optional)<input type='email' placeholder='you@example.com' /></label>
-        <label>What matters most to your household?<textarea rows={3} placeholder='Taste, odour, scale, dry skin, appliance protection, or other concerns.' /></label>
-        <button className='primaryButton' type='button'>Submit suburb request</button>
+        <label>Main water concern (optional)<textarea rows={3} placeholder='Taste, odour, scale, dry skin, appliance protection, or other concerns.' /></label>
+        <button className='primaryButton' type='button'>Request suburb review</button>
       </form>
       <p className='muted'>We only use this information to prioritise public data review coverage.</p>
     </section>}
 
     <section className='card ctaCard'>
-      <h3>Need property-specific certainty?</h3>
-      <p>For Brisbane and SE QLD households, Jila Water can test your home’s actual tap water and recommend the right whole-home filtration option.</p>
+      <h3>Want certainty at your own tap?</h3>
+      <p>For Brisbane and SE QLD households, Jila Water can test your actual home tap water and recommend the right whole-home filtration option based on your property, plumbing and concerns.</p>
       <a className='cta' href={window.__JILA_ASSESSMENT_URL__ ?? 'https://jilawater.com.au/free-home-water-assessment/'} target='_blank' rel='noreferrer'>Book a Free Home Water Assessment</a>
     </section>
 
