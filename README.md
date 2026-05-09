@@ -419,3 +419,34 @@ Moreton March 2026 rows have been manually checked and moved to reviewed draft s
 - Brisbane and Moreton display gates remain unchanged.
 
 - Logan March 2026 rows have been moved to reviewed draft status only where checked values were present. They are not publishable or published.
+
+
+## SEQ beta rollout state
+- Reviewed source-backed authority-level data is live for Brisbane and Moreton selected suburbs.
+- Gold Coast, Logan, Redland, Scenic Rim, and Somerset remain in review workflow.
+- Sample placeholders remain for uncovered suburbs while beta coverage is built.
+- Displayed reviewed values are authority-level monthly data, not individual household testing.
+
+## Reviewed display gate
+- Only `review_status=reviewed` records are eligible for source-backed display cards.
+- `imported` rows never display as reviewed source-backed output.
+- `publishable` and `published` statuses are not used for this beta rollout stage.
+
+## Adding another SEQ region
+1. Upload official source file(s) into `data/source-files/seqwater/`.
+2. Create candidate rows in `data/imports/`.
+3. Create needs-QA rows in `data/review/` with `review_status=imported`.
+4. Manually verify values, units, sample counts, and source pages.
+5. Prepare reviewed draft rows only when checks are complete and non-blank.
+6. Add a display gate route only for regions with safe reviewed rows.
+7. Keep all beta warnings and authority-level disclaimers visible.
+
+## Beta launch checklist
+- Search supports suburb/postcode exact and partial matching.
+- Reviewed records display only for eligible reviewed regions.
+- Sample fallback and unsupported suburb states are clear.
+- Source details panel appears for reviewed reports only.
+- Request suburb block and share actions are available.
+- Jila CTA stays transparent and points to Jila Water URL.
+- CI checks pass (`lint`, `build`, import, review validation).
+- Cloudflare Pages deploy passes with no routing regressions.
