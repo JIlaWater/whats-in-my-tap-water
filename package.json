@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "import:brisbane-seq": "tsx scripts/import-brisbane-seq.ts",
-    "validate:review-records": "tsx scripts/validate-review-records.ts"
+    "validate:review-records": "tsx scripts/validate-review-records.ts",
+    "test": "tsx tests/smoke.ts"
   },
   "dependencies": {
     "react": "^18.3.1",

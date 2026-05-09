@@ -1,80 +1,28 @@
-import { seqCoverageMap } from './coverageMap';
-import type {
-  AustralianSuburb,
-  LocationAuthorityMapping,
-  SourceFreshness,
-  SuburbWaterReport,
-  SupplyZone,
-  WaterAuthority,
-} from './dataModels';
+import type { DataSource, Region, Suburb, WaterReportProfile } from './dataModels';
 
-const SAMPLE = 'sample' as const;
-
-export const suburbs: AustralianSuburb[] = seqCoverageMap.map((entry) => ({
-  id: `au-qld-${entry.suburb.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${entry.postcode}`,
-  suburb: entry.suburb,
-  state: 'QLD',
-  postcode: entry.postcode,
-  lga: `${entry.region} Region`,
-  region: entry.region === 'Brisbane' ? 'Brisbane' : entry.region === 'Toowoomba' ? 'Regional' : 'SEQ',
-  dataLabel: SAMPLE,
-}));
-
-export const authorities: WaterAuthority[] = [
-  { id: 'urban-utilities', name: 'Urban Utilities', serviceArea: 'Brisbane / Ipswich / Lockyer Valley', plannedSourceIntegration: ['Urban Utilities annual reports', 'Seqwater treatment data'], dataLabel: SAMPLE },
-  { id: 'unitywater', name: 'Unitywater', serviceArea: 'Moreton Bay / Sunshine Coast / Noosa', plannedSourceIntegration: ['Unitywater quality reports', 'Seqwater source summaries'], dataLabel: SAMPLE },
-  { id: 'seqwater', name: 'Seqwater', serviceArea: 'South East Queensland bulk water supply', plannedSourceIntegration: ['Seqwater source water updates', 'Seqwater annual water quality data'], dataLabel: SAMPLE },
+export const sources: DataSource[] = [
+  { id: 'seqwater-bris-march-2026', sourceName: 'Seqwater Water Quality Report - Brisbane', sourceUrl: 'https://www.seqwater.com.au/water-quality-report', sourceType: 'pdf_report', publicationDate: '2026-03-31', lastCheckedDate: '2026-05-09', coverageLevel: 'Water authority', freshnessLabel: 'Monthly', confidence: 'Medium' },
+  { id: 'seqwater-moreton-march-2026', sourceName: 'Seqwater Water Quality Report - Moreton', sourceUrl: 'https://www.seqwater.com.au/water-quality-report', sourceType: 'pdf_report', publicationDate: '2026-03-31', lastCheckedDate: '2026-05-09', coverageLevel: 'Water authority', freshnessLabel: 'Monthly', confidence: 'Medium' },
+  { id: 'qld-health-guidance', sourceName: 'Queensland Health Drinking Water Guidance', sourceUrl: 'https://www.health.qld.gov.au/public-health/industry-environment/environment-land-water/water/quality/drinking', sourceType: 'guideline', publicationDate: '2025-01-01', lastCheckedDate: '2026-05-09', coverageLevel: 'State guidance', freshnessLabel: 'Static / Guideline', confidence: 'High' },
 ];
 
-export const supplyZones: SupplyZone[] = [
-  { id: 'zone-brisbane-inner', authorityId: 'urban-utilities', code: 'UU-BNE-INNER', displayName: 'Brisbane Inner Grid', description: 'Placeholder zone for inner Brisbane suburbs.', dataLabel: SAMPLE },
-  { id: 'zone-brisbane-south', authorityId: 'urban-utilities', code: 'UU-BNE-SOUTH', displayName: 'Brisbane South Grid', description: 'Placeholder zone for Brisbane southern suburbs.', dataLabel: SAMPLE },
-  { id: 'zone-ipswich-corridor', authorityId: 'urban-utilities', code: 'UU-IPS-COR', displayName: 'Ipswich Corridor', description: 'Placeholder zone for Ipswich and Springfield corridor.', dataLabel: SAMPLE },
-  { id: 'zone-logan-redlands', authorityId: 'urban-utilities', code: 'UU-LOG-RED', displayName: 'Logan & Redlands Interface', description: 'Placeholder mapped area for Logan/Redlands via SEQ network.', dataLabel: SAMPLE },
-  { id: 'zone-bay-coast', authorityId: 'unitywater', code: 'UW-BAY-CST', displayName: 'Bay & Coast Zone', description: 'Placeholder zone for Moreton Bay and Sunshine Coast.', dataLabel: SAMPLE },
+export const regions: Region[] = [
+  { name: 'Brisbane', slug: 'brisbane', providerGuess: 'Urban Utilities / Seqwater', waterSourceType: 'Treated mains', commonHouseholdConcerns: ['Chlorine taste', 'Dry skin/hair', 'Scale in appliances'], explanation: 'Public mains water is generally treated to Australian standards. Households still often want better taste and appliance comfort.', recommendation: 'If taste, odour or scale is a concern, compare a point-of-entry filtration assessment.', recommendedSystem: 'Whole-home filtration', confidence: 'Medium', coverage: 'Water authority', sourceIds: ['seqwater-bris-march-2026', 'qld-health-guidance'], disclaimer: 'This report uses public authority-level data, not a household lab test.', isSeqld: true },
+  { name: 'Moreton Bay / Caboolture', slug: 'moreton-bay-caboolture', providerGuess: 'Unitywater / Seqwater', waterSourceType: 'Treated mains', commonHouseholdConcerns: ['Taste variation', 'Sediment after pipe works'], explanation: 'Network-wide treatment supports compliance; local household experience can still vary.', recommendation: 'If recurring taste or sediment appears, request a home assessment and compare treatment options.', recommendedSystem: 'Whole-home filtration', confidence: 'Medium', coverage: 'Water authority', sourceIds: ['seqwater-moreton-march-2026', 'qld-health-guidance'], disclaimer: 'This report uses public authority-level data, not a household lab test.', isSeqld: true },
+  { name: 'Unknown / Needs assessment', slug: 'unknown', providerGuess: 'Unknown', waterSourceType: 'Unknown', commonHouseholdConcerns: ['Insufficient official local data in this MVP'], explanation: 'We do not yet have enough reviewed official data to give a reliable local profile.', recommendation: 'Use state guidance and request this suburb so it can be prioritised for official-source review.', recommendedSystem: 'Needs assessment', confidence: 'Unknown', coverage: 'Unknown', sourceIds: ['qld-health-guidance'], disclaimer: 'This report uses public authority-level data, not a household lab test.', isSeqld: false },
 ];
 
-export const suburbMappings: LocationAuthorityMapping[] = suburbs.map((suburb) => {
-  const coverage = seqCoverageMap.find((entry) => entry.suburb === suburb.suburb && entry.postcode === suburb.postcode);
-  const authorityId = coverage?.waterAuthority === 'Unitywater'
-    ? 'unitywater'
-    : coverage?.waterAuthority === 'Seqwater'
-      ? 'seqwater'
-      : 'urban-utilities';
+export const suburbs: Suburb[] = [
+  { id: 'south-brisbane-4101', suburb: 'South Brisbane', postcode: '4101', state: 'QLD', regionSlug: 'brisbane' },
+  { id: 'west-end-4101', suburb: 'West End', postcode: '4101', state: 'QLD', regionSlug: 'brisbane' },
+  { id: 'caboolture-4510', suburb: 'Caboolture', postcode: '4510', state: 'QLD', regionSlug: 'moreton-bay-caboolture' },
+  { id: 'ipswich-4305', suburb: 'Ipswich', postcode: '4305', state: 'QLD', regionSlug: 'unknown' },
+  { id: 'southport-4215', suburb: 'Southport', postcode: '4215', state: 'QLD', regionSlug: 'unknown' },
+  { id: 'cleveland-4163', suburb: 'Cleveland', postcode: '4163', state: 'QLD', regionSlug: 'unknown' },
+];
 
-  const supplyZoneId = authorityId === 'unitywater'
-    ? 'zone-bay-coast'
-    : suburb.region === 'Brisbane'
-      ? 'zone-brisbane-inner'
-      : 'zone-logan-redlands';
-
-  return { suburbId: suburb.id, authorityId, supplyZoneId, mappingLabel: SAMPLE };
-});
-
-
-const commonFreshness: SourceFreshness = {
-  sourceName: 'Sample placeholder ETL batch',
-  fetchedAt: '2026-05-01T00:00:00Z',
-  expectedRefreshDays: 30,
-  staleness: 'aging',
-  dataLabel: SAMPLE,
-};
-
-export const reports: SuburbWaterReport[] = suburbs.map((suburb, index) => ({
-  suburbId: suburb.id,
-  confidence: {
-    level: 'low',
-    scoreOutOf100: 35 + (index % 10),
-    reason: 'Placeholder-only values pending live authority ingestion.',
-    dataLabel: SAMPLE,
-  },
-  sourceFreshness: commonFreshness,
-  parameters: [
-    { key: 'hardness_mg_l', displayName: 'Hardness', unit: 'mg/L', placeholderValue: 45 + (index % 12), methodNote: 'Sample generated value.', dataLabel: SAMPLE },
-    { key: 'free_chlorine_mg_l', displayName: 'Free Chlorine', unit: 'mg/L', placeholderValue: Number((0.45 + (index % 8) * 0.03).toFixed(2)), methodNote: 'Sample generated value.', dataLabel: SAMPLE },
-    { key: 'ph', displayName: 'pH', unit: 'pH', placeholderValue: Number((7.1 + (index % 5) * 0.1).toFixed(1)), methodNote: 'Sample generated value.', dataLabel: SAMPLE },
-    { key: 'tds_mg_l', displayName: 'Total Dissolved Solids (TDS)', unit: 'mg/L', placeholderValue: 120 + index * 2, methodNote: 'Sample generated value.', dataLabel: SAMPLE },
-  ],
-  notes: ['SAMPLE / PLACEHOLDER DATA ONLY.', 'Not live water quality data.', 'No health guidance provided.'],
-  dataLabel: SAMPLE,
-}));
+export const reportProfiles: WaterReportProfile[] = [
+  { id: 'brisbane-mains-profile', regionSlug: 'brisbane', profileName: 'Brisbane mains profile', confidence: 'Medium', coverage: 'Water authority', freshness: 'Monthly', lastCheckedDate: '2026-05-09', sourceIds: ['seqwater-bris-march-2026', 'qld-health-guidance'], summary: 'Authority-level indicators suggest treated mains water with common household concerns around taste, odour and scale comfort.', likelySymptoms: ['Chlorine smell/taste', 'Dry skin/hair', 'Scale build-up', 'Appliance protection concerns'], parameters: [], recommendation: { nextSteps: ['Check household taste/odour patterns at different times of day.', 'Consider a free home water assessment before choosing a filter system.'], ctaLabel: 'Book a Free Home Water Assessment', ctaUrl: 'https://jilawater.com.au/free-home-water-assessment/' }, methodology: 'Profile based on authority-level public report context and state guidance; not household-specific testing.' },
+  { id: 'moreton-mains-profile', regionSlug: 'moreton-bay-caboolture', profileName: 'Moreton Bay/Caboolture profile', confidence: 'Medium', coverage: 'Water authority', freshness: 'Monthly', lastCheckedDate: '2026-05-09', sourceIds: ['seqwater-moreton-march-2026', 'qld-health-guidance'], summary: 'Authority-level reporting indicates treated mains water; household experience can vary by local plumbing and network conditions.', likelySymptoms: ['Taste variation', 'Sediment/rust particles', 'Scale build-up', 'Appliance protection concerns'], parameters: [], recommendation: { nextSteps: ['Track when discolouration or sediment appears (for example after maintenance).', 'Consider a whole-home assessment if nuisance issues persist.'], ctaLabel: 'Book a Free Home Water Assessment', ctaUrl: 'https://jilawater.com.au/free-home-water-assessment/' }, methodology: 'Profile based on authority-level public report context and state guidance; not household-specific testing.' },
+  { id: 'unknown-profile', regionSlug: 'unknown', profileName: 'Unknown / needs assessment profile', confidence: 'Unknown', coverage: 'Unknown', freshness: 'Unknown', lastCheckedDate: '2026-05-09', sourceIds: ['qld-health-guidance'], summary: 'We do not have enough reviewed official local data for this search yet.', likelySymptoms: ['Data incomplete for this suburb/postcode'], parameters: [], recommendation: { nextSteps: ['Use state guidance for general understanding.', 'Request this suburb to prioritise official-source verification.'] }, methodology: 'Conservative fallback profile used when local reviewed source-backed data is not available.' },
+];

@@ -450,3 +450,44 @@ Moreton March 2026 rows have been manually checked and moved to reviewed draft s
 - Jila CTA stays transparent and points to Jila Water URL.
 - CI checks pass (`lint`, `build`, import, review validation).
 - Cloudflare Pages deploy passes with no routing regressions.
+
+## Phase 1 MVP update (May 2026)
+
+### Environment variables
+- `JILA_ASSESSMENT_URL`
+- `JILA_ZAPIER_WEBHOOK_URL` (optional future server endpoint target)
+- `PUBLIC_SITE_URL`
+
+### Confidence model
+Reports use only: `High`, `Medium`, `Low`, `Unknown`.
+Low/Unknown confidence report pages should default to `noindex`.
+
+### Source model requirements
+Where water data is displayed, include:
+- source URL
+- source type
+- publication date
+- last checked date
+- coverage level
+- freshness label
+- confidence label
+- plain-English explanation
+- practical next steps
+- household lab-test disclaimer
+
+### Adding new suburbs/regions
+1. Add suburb in `src/seedData.ts` with `regionSlug`.
+2. Add/update region profile and source metadata in `src/seedData.ts`.
+3. Keep unknown areas mapped to conservative `unknown` profile until reviewed official data exists.
+4. Run lint, build, import preview and review validation before merge.
+
+### Indexing decision rule (Phase 1)
+- `High` confidence + substantial content: `index,follow`
+- `Medium` confidence + substantial regional content: usually `index,follow`
+- `Low` confidence: `noindex,follow`
+- `Unknown` confidence: `noindex,follow`
+- Thin fallback pages must remain `noindex`.
+
+### Webhook configuration note
+Lead payload generation is implemented, but webhook posting should only run when `JILA_ZAPIER_WEBHOOK_URL` is configured.
+If missing, the app should fail gracefully and continue without sending lead data.
