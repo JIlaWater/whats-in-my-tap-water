@@ -1,0 +1,11 @@
+qa_id,source_file_name,local_repo_path,source_owner,source_type,report_period,parameter_name,source_page_or_sheet,source_table_or_section,value_to_check,unit_to_check,min_value_to_check,average_value_to_check,max_value_to_check,sample_count_to_check,reviewer_initials,review_date,review_status,reviewer_notes
+seq-src-qa-001,,,,,,,,,,,,,,,,,imported,
+seq-src-qa-002,,,,,,,,,,,,,,,,,imported,
+seq-src-qa-003,,,,,,,,,,,,,,,,,imported,
+seq-src-qa-004,,,,,,,,,,,,,,,,,imported,
+seq-src-qa-005,,,,,,,,,,,,,,,,,imported,
+seq-src-qa-006,,,,,,,,,,,,,,,,,imported,
+seq-src-qa-007,,,,,,,,,,,,,,,,,imported,
+seq-src-qa-008,,,,,,,,,,,,,,,,,imported,
+seq-src-qa-009,,,,,,,,,,,,,,,,,imported,
+seq-src-qa-010,,,,,,,,,,,,,,,,,imported,
