@@ -1,9 +1,9 @@
 export type ReviewedWaterRecord = {
-  record_id: string; region: string; state: string; water_authority: string; source_owner: string; source_file_name: string; source_type: string; parameter_name: string; min_value: string; average_value: string; max_value: string; unit: string; number_of_samples: string; report_month: string; source_page: string; coverage_level: string; confidence_level: string; review_status: string; reviewer_notes: string;
+  record_id: string; region: string; state: string; water_authority: string; source_owner: string; source_file_name: string; source_type: string; parameter_name: string; min_value: string; average_value: string; max_value: string; unit: string; number_of_samples: string; report_month: string; source_page: string; coverage_level: string; confidence_level: string; review_status: string; reviewer_notes: string; reviewer_initials: string; review_date: string; local_source_file_path: string;
 };
 
 const base = {
-  region: 'Brisbane', state: 'QLD', water_authority: 'Urban Utilities', source_owner: 'Seqwater', source_file_name: 'Seqwater Water Quality Report - Brisbane - 2026-03.pdf', source_type: 'monthly_water_quality_report_pdf', report_month: '2026-03', coverage_level: 'authority', confidence_level: 'medium', review_status: 'reviewed', reviewer_notes: 'Checked against uploaded Seqwater Brisbane March 2026 PDF. Authority-level monthly data, not individual household tap testing.'
+  region: 'Brisbane', state: 'QLD', water_authority: 'Urban Utilities', source_owner: 'Seqwater', source_file_name: 'Seqwater Water Quality Report - Brisbane - 2026-03.pdf', source_type: 'monthly_water_quality_report_pdf', report_month: '2026-03', coverage_level: 'authority', confidence_level: 'medium', review_status: 'reviewed', reviewer_notes: 'Checked against uploaded Seqwater Brisbane March 2026 PDF. Authority-level monthly data, not individual household tap testing.', reviewer_initials: 'JG', review_date: '2026-05-09', local_source_file_path: 'data/source-files/seqwater/Seqwater Water Quality Report - Brisbane - 2026-03.pdf'
 };
 
 export const brisbaneMarch2026ReviewedData: ReviewedWaterRecord[] = [
