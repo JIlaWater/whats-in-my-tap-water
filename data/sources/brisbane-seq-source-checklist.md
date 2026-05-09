@@ -86,6 +86,42 @@ Use this section when the official weekly taste/odour source is provided as an E
 - Do not scrape or auto-ingest external spreadsheet links.
 ---
 
+
+## Uploaded local source files
+
+These local artifacts are available for manual reviewer reference and source traceability only. Values must still be manually checked before any row can move to `reviewed` status.
+
+### Brisbane March 2026 Monthly Water Quality Report PDF
+- **local repo path:** `data/source-files/seqwater/Seqwater Water Quality Report - Brisbane - 2026-03.pdf`
+- **source owner:** Seqwater
+- **source type:** downloadable_pdf
+- **intended use:** Primary March 2026 Brisbane monthly parameter/value extraction and source metadata capture for CSV templates.
+- **review requirement:** Reviewer must confirm publication date, parameter mapping, units, and zone context before lifecycle promotion.
+- **manual-check note:** Values must be manually checked against the PDF tables before setting any row to `reviewed`.
+
+### Other SEQ monthly water quality report PDFs
+- **local repo path:**
+  - `data/source-files/seqwater/Seqwater Water Quality Report - Gold Coast - 2026-03.pdf`
+  - `data/source-files/seqwater/Seqwater Water Quality Report - Logan - 2026-03.pdf`
+  - `data/source-files/seqwater/Seqwater Water Quality Report - Moreton - 2026-03.pdf`
+  - `data/source-files/seqwater/Seqwater Water Quality Report - Redland - 2026-03.pdf`
+  - `data/source-files/seqwater/Seqwater Water Quality Report - Scenic Rim - 2026-03.pdf`
+  - `data/source-files/seqwater/Seqwater Water Quality Report - Somerset - 2026-03.pdf`
+  - `data/source-files/seqwater/Seqwater Water Quality Report - Sunshine Coast - 2026-03.pdf`
+- **source owner:** Seqwater
+- **source type:** downloadable_pdf
+- **intended use:** Region-specific monthly source verification and cross-checking for SEQ zone/suburb mapping during manual import QA.
+- **review requirement:** Reviewer must verify each value against the correct regional report and document mapping decisions in QA notes.
+- **manual-check note:** Values must be manually checked before any imported record is marked `reviewed`.
+
+### Seqwater Weekly Taste and Odour XLSX
+- **local repo path:** `data/source-files/seqwater/seqwater_taste_odour_results_day_20260508.xlsx`
+- **source owner:** Seqwater
+- **source type:** downloadable_xlsx
+- **intended use:** Weekly taste/odour context and any explicitly reported worksheet values used in source-backed QA records.
+- **review requirement:** Reviewer must perform cell-by-cell verification for referenced values and confirm report date/source metadata before status changes.
+- **manual-check note:** Spreadsheet-derived values must be manually checked before setting rows to `reviewed`.
+
 ## Completion criteria for first 5–10 records
 Before moving any row beyond `imported`, ensure each selected source entry above has:
 1. A valid source URL.

@@ -119,6 +119,13 @@ Use these as the initial discovery/verification set only. Do not scrape, do not 
 - Do not auto-publish Excel-derived values.
 - Do not scrape external sources automatically.
 
+
+### Uploaded Seqwater source files
+- Official Seqwater source files are stored in-repo at `data/source-files/seqwater/` for auditability and traceability during manual QA.
+- These uploaded files do **not** automatically publish any data to the app and are not a direct publishing path.
+- Reviewers must still manually verify all extracted values against the source documents before records can be promoted.
+- Imported/candidate records remain non-public until QA is complete and lifecycle controls are satisfied (`imported` -> `reviewed` -> `publishable` -> `published`).
+
 ### Safe import workflow
 1. Keep sample values in app data until source records validate.
 2. Populate source templates with official URLs and dates first.
