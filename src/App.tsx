@@ -4,6 +4,15 @@ import { getReviewedWaterData } from './sourceBackedData/getReviewedWaterData';
 
 const SAMPLE_LABEL = 'SAMPLE / PLACEHOLDER DATA ONLY';
 const SITE_NAME = 'WhatsInMyTapWater.com';
+const HERO_MASCOT_LOCAL = '/images/kangaroo-water-mascot.webp';
+const HERO_MASCOT_REMOTE_FALLBACK = 'https://jilawater.com.au/wp-content/uploads/2026/05/kangaroo-water-mascot.webp';
+const SUGGESTED_SUBURB_IDS = [
+  'au-qld-south-brisbane-4101',
+  'au-qld-new-farm-4005',
+  'au-qld-west-end-4101',
+  'au-qld-carindale-4152',
+  'au-qld-north-lakes-4509',
+] as const;
 
 const slugFor = (suburbId: string) => suburbId;
 
@@ -40,6 +49,7 @@ const setMeta = (name: string, content: string, property = false) => {
 export const App = () => {
   const [query, setQuery] = useState('');
   const [route, setRoute] = useState<Route>(() => getRoute());
+  const [heroSrc, setHeroSrc] = useState(HERO_MASCOT_LOCAL);
 
   useEffect(() => {
     const onPop = () => setRoute(getRoute());
@@ -54,6 +64,10 @@ export const App = () => {
       .filter((s) => s.suburb.toLowerCase().includes(q) || s.postcode.includes(q))
       .slice(0, 10);
   }, [query]);
+  const suggestedSuburbs = useMemo(
+    () => SUGGESTED_SUBURB_IDS.map((id) => suburbs.find((s) => s.id === id)).filter((s): s is NonNullable<typeof s> => Boolean(s)),
+    [],
+  );
 
   const activeSuburbId = route.type === 'report' ? route.suburbId : suburbs[0]?.id;
   const suburb = suburbs.find((s) => s.id === activeSuburbId);
@@ -144,7 +158,13 @@ export const App = () => {
             <p className="betaNote">Beta preview: all suburb metrics, confidence, and freshness values remain sample placeholders.</p>
           </div>
           <figure className="heroMascot">
-            <img src="/images/kangaroo-water-mascot.webp" alt="Friendly Australian kangaroo mascot drinking a glass of water with the Australian flag draped over its shoulders." loading="eager" decoding="async" />
+            <img
+              src={heroSrc}
+              alt="Friendly Australian kangaroo mascot drinking a glass of water with the Australian flag draped over its shoulders."
+              loading="eager"
+              decoding="async"
+              onError={() => setHeroSrc((current) => (current === HERO_MASCOT_LOCAL ? HERO_MASCOT_REMOTE_FALLBACK : current))}
+            />
           </figure>
         </div>
       </header>
@@ -157,8 +177,9 @@ export const App = () => {
         ) : (
           <div className="searchNoResults">
             <p><strong>We don’t have that suburb in the beta dataset yet.</strong></p>
-            <p>This beta currently includes a small set of Brisbane/SEQ suburbs while source-backed coverage is being built.</p>
-            <p>Try South Brisbane, New Farm, West End or Carindale</p>
+            <p>This beta currently includes selected Brisbane/SEQ suburbs while source-backed coverage is being built.</p>
+            <p>No match for “{query.trim()}”. Current report remains <strong>{suburb.suburb}</strong> until you select a suburb below.</p>
+            <div className="chips">{suggestedSuburbs.map((s) => <button key={s.id} onClick={() => openReport(s.id)}>{s.suburb} ({s.postcode})</button>)}</div>
           </div>
         )}
       </section>
@@ -179,7 +200,11 @@ export const App = () => {
               <span className="badge warn">Not individual tap testing</span>
             </>
           ) : (
-            <span className="badge warn">{SAMPLE_LABEL}</span>
+            <>
+              <span className="badge warn">Sample / placeholder data only</span>
+              <span className="badge warn">No {suburb.suburb}-specific source-backed data is currently displayed</span>
+              <span className="badge warn">Beta coverage is being built</span>
+            </>
           )}
         </div>
         {hasReviewedRecords ? (

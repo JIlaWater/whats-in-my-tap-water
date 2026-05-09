@@ -50,7 +50,7 @@ body { margin: 0; }
 .heroMascot {
   margin: 0;
   justify-self: center;
-  width: min(72vw, 260px);
+  width: min(80vw, 340px);
 }
 
 .heroMascot img {
@@ -84,6 +84,14 @@ body { margin: 0; }
 }
 
 .searchPanel h2 { margin-top: 0; }
+.searchNoResults {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.65rem;
+  border: 1px solid #fdba74;
+  background: #fff7ed;
+}
+.searchNoResults p { margin: 0.3rem 0; }
 .searchPanel input {
   width: 100%;
   padding: 0.8rem;
@@ -147,6 +155,6 @@ button {
   }
   .heroMascot {
     justify-self: end;
-    width: min(100%, 300px);
+    width: min(100%, 380px);
   }
 }
