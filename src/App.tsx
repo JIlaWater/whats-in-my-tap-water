@@ -79,6 +79,8 @@ export const App = () => {
   const report = reports.find((r) => r.suburbId === activeSuburbId);
   const reviewedRecords = suburb && mapping ? getReviewedWaterData(suburb, mapping) : [];
   const hasReviewedRecords = reviewedRecords.length > 0;
+  const reviewedRegion = reviewedRecords[0]?.region?.toLowerCase() ?? '';
+  const isMoretonReviewed = reviewedRegion === 'moreton';
 
   const reportUrl = suburb ? `${window.location.origin}/report/${slugFor(suburb.id)}` : window.location.href;
 
@@ -207,7 +209,7 @@ export const App = () => {
           {hasReviewedRecords ? (
             <>
               <span className="badge trust">Reviewed source-backed data</span>
-              <span className="badge trust">Coverage: Brisbane authority-level</span>
+              <span className="badge trust">Coverage: {isMoretonReviewed ? 'Moreton authority-level' : 'Brisbane authority-level'}</span>
               <span className="badge">Confidence: medium</span>
               <span className="badge warn">Not individual tap testing</span>
             </>
@@ -221,22 +223,22 @@ export const App = () => {
         </div>
         {hasReviewedRecords ? (
           <>
-            <p><strong>Source:</strong> Seqwater Brisbane Monthly Water Quality Report — March 2026</p>
+            <p><strong>Source:</strong> {isMoretonReviewed ? 'Seqwater Moreton Monthly Water Quality Report — March 2026' : 'Seqwater Brisbane Monthly Water Quality Report — March 2026'}</p>
             <p><em>Authority-level monthly data, not a test from your individual tap.</em></p>
             <details className="sourceDetails">
               <summary><strong>Source details</strong></summary>
               <div className="sourceDetailsCard">
                 <ul>
-                  <li><strong>Source:</strong> Seqwater Brisbane Monthly Water Quality Report — March 2026</li>
+                  <li><strong>Source:</strong> {isMoretonReviewed ? 'Seqwater Moreton Monthly Water Quality Report — March 2026' : 'Seqwater Brisbane Monthly Water Quality Report — March 2026'}</li>
                   <li><strong>Source owner:</strong> Seqwater</li>
                   <li><strong>Source type:</strong> downloadable_pdf</li>
                   <li><strong>Report month:</strong> March 2026</li>
-                  <li><strong>Coverage level:</strong> Brisbane authority-level</li>
+                  <li><strong>Coverage level:</strong> {isMoretonReviewed ? 'Moreton authority-level' : 'Brisbane authority-level'}</li>
                   <li><strong>Confidence level:</strong> medium</li>
                   <li><strong>Review status:</strong> reviewed</li>
                   <li><strong>Reviewer initials:</strong> JG</li>
                   <li><strong>Review date:</strong> 2026-05-09</li>
-                  <li><strong>Source file:</strong> <code>data/source-files/seqwater/Seqwater Water Quality Report - Brisbane - 2026-03.pdf</code></li>
+                  <li><strong>Source file:</strong> <code>{isMoretonReviewed ? 'data/source-files/seqwater/Seqwater Water Quality Report - Moreton - 2026-03.pdf' : 'data/source-files/seqwater/Seqwater Water Quality Report - Brisbane - 2026-03.pdf'}</code></li>
                 </ul>
                 <p><em>Authority-level monthly water quality data. Not a test from your individual household tap.</em></p>
               </div>

@@ -1,5 +1,5 @@
 export type ReviewedWaterRecord = {
-  record_id: string; region: string; state: string; water_authority: string; source_owner: string; source_file_name: string; source_type: string; parameter_name: string; min_value: string; average_value: string; max_value: string; unit: string; number_of_samples: string; report_month: string; source_page: string; coverage_level: string; confidence_level: string; review_status: string; reviewer_notes: string; reviewer_initials: string; review_date: string; local_source_file_path: string;
+  record_id: string; region: string; state: string; water_authority: string; source_owner: string; source_file_name: string; source_type: string; parameter_name: string; min_value: string; average_value: string; max_value: string; unit: string; number_of_samples: string; report_month: string; source_page: string; coverage_level: string; confidence_level: string; review_status: string; reviewer_notes: string; reviewer_initials?: string; review_date?: string; local_source_file_path?: string;
 };
 
 const base = {
