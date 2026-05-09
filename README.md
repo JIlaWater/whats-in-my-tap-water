@@ -382,3 +382,5 @@ Requirements:
 Control reminder:
 - Do not publish data directly from uploaded files.
 - Do not mark rows as reviewed, publishable, or published until manual QA sign-off is complete.
+
+Brisbane March 2026 rows have been manually checked and moved to reviewed draft status only. They are not publishable or published.
