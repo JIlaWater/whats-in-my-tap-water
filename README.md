@@ -417,3 +417,5 @@ Moreton March 2026 rows have been manually checked and moved to reviewed draft s
 - Manual QA is required before any row can move to `reviewed` status.
 - Missing source PDFs must be added before the affected region can progress.
 - Brisbane and Moreton display gates remain unchanged.
+
+- Logan March 2026 rows have been moved to reviewed draft status only where checked values were present. They are not publishable or published.
