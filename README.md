@@ -392,3 +392,10 @@ Control reminder:
 - Imported/sample/rejected/publishable/published records are excluded from source-backed display.
 - Beta warnings remain enabled in the UI.
 - Displayed reviewed values are authority/report-zone level monthly data and are not tests from an individual household tap.
+
+## Moreton March 2026 candidate records
+
+- Moreton March 2026 records are imported candidates only.
+- No Moreton values are public yet.
+- Human QA is required before any row can move beyond `imported`/`reviewed` workflow checks.
+- No Moreton records may become publishable or published until manual verification is complete.
