@@ -408,3 +408,4 @@ Moreton March 2026 rows have been manually checked and moved to reviewed draft s
 - Imported/sample/rejected/publishable/published records are blocked from source-backed display.
 - Beta warnings remain enabled while suburb coverage is still in progress.
 - Displayed data is authority/report-zone level monthly reporting and is not individual household tap testing.
+
