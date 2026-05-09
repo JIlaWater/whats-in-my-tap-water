@@ -401,3 +401,10 @@ Control reminder:
 - No Moreton records may become publishable or published until manual verification is complete.
 
 Moreton March 2026 rows have been manually checked and moved to reviewed draft status only. They are not publishable or published.
+
+## Displaying reviewed Moreton source-backed data
+
+- Only rows with `review_status` set to `reviewed` in the Moreton March 2026 reviewed draft set can display as source-backed.
+- Imported/sample/rejected/publishable/published records are blocked from source-backed display.
+- Beta warnings remain enabled while suburb coverage is still in progress.
+- Displayed data is authority/report-zone level monthly reporting and is not individual household tap testing.
