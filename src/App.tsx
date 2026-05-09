@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { authorities, reports, suburbMappings, suburbs, supplyZones } from './seedData';
+import { getReviewedWaterData } from './sourceBackedData/getReviewedWaterData';
 
 const SAMPLE_LABEL = 'SAMPLE / PLACEHOLDER DATA ONLY';
 const SITE_NAME = 'WhatsInMyTapWater.com';
@@ -60,6 +61,8 @@ export const App = () => {
   const authority = authorities.find((a) => a.id === mapping?.authorityId);
   const supplyZone = supplyZones.find((z) => z.id === mapping?.supplyZoneId);
   const report = reports.find((r) => r.suburbId === activeSuburbId);
+  const reviewedRecords = suburb && mapping ? getReviewedWaterData(suburb, mapping) : [];
+  const hasReviewedRecords = reviewedRecords.length > 0;
 
   const reportUrl = suburb ? `${window.location.origin}/report/${slugFor(suburb.id)}` : window.location.href;
 
@@ -161,8 +164,17 @@ export const App = () => {
           <span className="badge">Confidence: {report.confidence.level} ({report.confidence.scoreOutOf100}/100)</span>
           <span className="badge">Freshness: {report.sourceFreshness.staleness}</span>
           <span className="badge warn">{SAMPLE_LABEL}</span>
+          {hasReviewedRecords ? <span className="badge trust">Reviewed source-backed data</span> : null}
         </div>
-        <ul>{report.parameters.map((param) => <li key={param.key}><strong>{param.displayName}:</strong> {param.placeholderValue} {param.unit} <em>(sample/placeholder)</em></li>)}</ul>
+        {hasReviewedRecords ? (
+          <>
+            <p><strong>Source:</strong> Seqwater Brisbane Monthly Water Quality Report — March 2026</p>
+            <p><em>Authority-level monthly data, not a test from your individual tap.</em></p>
+            <ul>{reviewedRecords.map((record) => <li key={record.record_id}><strong>{record.parameter_name}:</strong> min {record.min_value}, avg {record.average_value}, max {record.max_value} {record.unit} (samples: {record.number_of_samples})</li>)}</ul>
+          </>
+        ) : (
+          <ul>{report.parameters.map((param) => <li key={param.key}><strong>{param.displayName}:</strong> {param.placeholderValue} {param.unit} <em>(sample/placeholder)</em></li>)}</ul>
+        )}
       </section>
 
       {isBrisbaneOrSeq(suburb.region) ? (
