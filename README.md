@@ -409,3 +409,11 @@ Moreton March 2026 rows have been manually checked and moved to reviewed draft s
 - Beta warnings remain enabled while suburb coverage is still in progress.
 - Displayed data is authority/report-zone level monthly reporting and is not individual household tap testing.
 
+
+## Regional March 2026 batch: Gold Coast, Logan, Redland, Scenic Rim and Somerset
+
+- This regional batch is **imported only** and is staged for manual QA.
+- No new values from this batch are displayed publicly yet.
+- Manual QA is required before any row can move to `reviewed` status.
+- Missing source PDFs must be added before the affected region can progress.
+- Brisbane and Moreton display gates remain unchanged.
