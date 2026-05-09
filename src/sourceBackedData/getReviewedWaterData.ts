@@ -4,8 +4,14 @@ import { moretonMarch2026ReviewedData } from './moretonMarch2026';
 
 const BLOCKED_STATUSES = new Set(['imported', 'sample', 'rejected', 'publishable', 'published']);
 
-const filterSafeReviewed = (records: ReviewedWaterRecord[]) =>
-  records.filter((record) => record.review_status === 'reviewed' && !BLOCKED_STATUSES.has(record.review_status));
+const filterSafeReviewed = (records: ReviewedWaterRecord[]) => records.filter((record) => {
+  const status = record.review_status?.toLowerCase();
+  if (!status) {
+    return false;
+  }
+
+  return status === 'reviewed' && !BLOCKED_STATUSES.has(status);
+});
 
 const MORETON_REVIEWED_SUBURBS = new Set([
   'au-qld-north-lakes-4509',
@@ -30,7 +36,8 @@ export const getReviewedWaterData = (
     && MORETON_REVIEWED_SUBURBS.has(suburbId);
 
   if (supportsMoreton) {
-    return filterSafeReviewed(moretonMarch2026ReviewedData);
+    const reviewedMoreton = filterSafeReviewed(moretonMarch2026ReviewedData);
+    return reviewedMoreton.length > 0 ? reviewedMoreton : [];
   }
 
   return [];
