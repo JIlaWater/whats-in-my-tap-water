@@ -385,3 +385,10 @@ Control reminder:
 
 ## Brisbane March 2026 review note
 - Brisbane March 2026 rows have been manually checked and moved to reviewed draft status only. They are not publishable or published.
+
+## Displaying reviewed Brisbane source-backed data
+
+- Only records with `review_status=reviewed` are eligible to display as source-backed data in the app.
+- Imported/sample/rejected/publishable/published records are excluded from source-backed display.
+- Beta warnings remain enabled in the UI.
+- Displayed reviewed values are authority/report-zone level monthly data and are not tests from an individual household tap.
