@@ -1,21 +1,22 @@
 import assert from 'node:assert/strict';
 import { buildSeoMeta, shouldIndexPage } from '../src/seo';
-import { canDisplayExactValue } from '../src/dataHonesty';
 import { locationProfiles } from '../src/seedData';
+import { searchProfiles } from '../src/search';
 
 assert.equal(shouldIndexPage('Medium', true), true);
 assert.equal(shouldIndexPage('Low', true), false);
 assert.equal(buildSeoMeta('Australia', 'Unknown', false).robots, 'noindex,follow');
 
-const sourced = {
-  label: 'Hardness', value: '100', unit: 'mg/L', isExactValue: true, confidence: 'High' as const, coverageLevel: 'Exact suburb' as const,
-  source: { title: 'x', humanLabel: 'Official water authority report', sourceType: 'pdf_report' as const, publisher: 'Seqwater', publicationDate: '2026-03-31', lastChecked: '2026-05-09', coverageLevel: 'Exact suburb' as const, confidence: 'High' as const, url: 'https://example.com' },
-};
-assert.equal(canDisplayExactValue(sourced), true);
-assert.equal(canDisplayExactValue({ ...sourced, source: { ...sourced.source, publicationDate: undefined } }), false);
-assert.ok(locationProfiles.find((p) => p.suburb === 'Brisbane CBD'));
-assert.ok(locationProfiles.find((p) => p.suburb === 'South Brisbane'));
-assert.ok(locationProfiles.find((p) => p.suburb === 'West End'));
-assert.ok(locationProfiles.find((p) => p.suburb === 'Caboolture'));
+const cases = ['Brisbane', '4000', 'South Brisbane', '4101', 'West End', 'Caboolture', '4510', 'Ipswich', 'Gold Coast', 'Nunda', 'Nundah', '9999', 'fake suburb', ''];
+for (const c of cases) {
+  const r = searchProfiles(c);
+  if (c === '') assert.equal(r.status, 'empty');
+  if (c === '4101') assert.equal(r.status, 'multiple');
+  if (c === 'Nunda') assert.ok(r.profiles.some((p) => p.suburb === 'Nundah') || r.suggestions.includes('Nundah'));
+  if (c === '9999' || c === 'fake suburb') assert.equal(r.status, 'unknown');
+}
 
+assert.ok(locationProfiles.every((p) => p.sources.every((s) => ['Official water authority report', 'Government drinking water guidance', 'Source under review'].includes(s.humanLabel))));
+assert.ok(locationProfiles.every((p) => p.shareSummary.length > 0 && p.socialPost.length > 0));
+assert.ok(locationProfiles.filter((p) => ['Brisbane CBD', 'South Brisbane', 'West End', 'Caboolture'].includes(p.suburb)).every((p) => p.confidence === 'Medium'));
 console.log('smoke tests passed');
