@@ -1,12 +1,12 @@
 record_id,parameter_name,value_checked,unit_checked,min_value_checked,average_value_checked,max_value_checked,number_of_samples_checked,source_page_checked,reviewer_initials,review_date,review_status,reviewer_notes
-bris_m2026_001,Fluoride,,,,,,,,,,imported,Candidate imported row. Pending manual QA verification against source PDF.
-bris_m2026_002,Free Chlorine,,,,,,,,,,imported,Candidate imported row. Pending manual QA verification against source PDF.
-bris_m2026_003,Monochloramine,,,,,,,,,,imported,Candidate imported row. Pending manual QA verification against source PDF.
-bris_m2026_004,Total Chlorine,,,,,,,,,,imported,Candidate imported row. Pending manual QA verification against source PDF.
-bris_m2026_005,Hardness,,,,,,,,,,imported,Candidate imported row. Pending manual QA verification against source PDF.
-bris_m2026_006,pH,,,,,,,,,,imported,Candidate imported row. Pending manual QA verification against source PDF.
-bris_m2026_007,Total Dissolved Solids,,,,,,,,,,imported,Candidate imported row. Pending manual QA verification against source PDF.
-bris_m2026_008,Turbidity,,,,,,,,,,imported,Candidate imported row. Pending manual QA verification against source PDF.
-bris_m2026_009,Alkalinity Total,,,,,,,,,,imported,Candidate imported row. Pending manual QA verification against source PDF.
-bris_m2026_010,Geosmin,,,,,,,,,,imported,Candidate imported row. Pending manual QA verification against source PDF.
-bris_m2026_011,2-Methylisoborneol / MIB,,,,,,,,,,imported,Candidate imported row. Pending manual QA verification against source PDF.
+bris_m2026_001,Fluoride,,mg/L,0.73,0.81,0.88,35,page 1,JG,2026-05-09,reviewed,"Checked against uploaded Seqwater Brisbane March 2026 PDF. Authority-level monthly data, not individual household tap testing."
+bris_m2026_002,Free Chlorine,,mg/L,<0.1,0.1,0.2,8,page 1,JG,2026-05-09,reviewed,"Checked against uploaded Seqwater Brisbane March 2026 PDF. Authority-level monthly data, not individual household tap testing."
+bris_m2026_003,Monochloramine,,mg/L,2.4,3.0,3.6,33,page 1,JG,2026-05-09,reviewed,"Checked against uploaded Seqwater Brisbane March 2026 PDF. Authority-level monthly data, not individual household tap testing."
+bris_m2026_004,Total Chlorine,,mg/L,2.4,3.1,3.8,33,page 1,JG,2026-05-09,reviewed,"Checked against uploaded Seqwater Brisbane March 2026 PDF. Authority-level monthly data, not individual household tap testing."
+bris_m2026_005,Hardness,,mg/L,93.0,113.2,130.0,14,page 2,JG,2026-05-09,reviewed,"Checked against uploaded Seqwater Brisbane March 2026 PDF. Authority-level monthly data, not individual household tap testing."
+bris_m2026_006,pH,,pH Unit,7.7,7.9,8.1,33,page 2,JG,2026-05-09,reviewed,"Checked against uploaded Seqwater Brisbane March 2026 PDF. Authority-level monthly data, not individual household tap testing."
+bris_m2026_007,Total Dissolved Solids,,mg/L,240.0,267.5,300.0,8,page 2,JG,2026-05-09,reviewed,"Checked against uploaded Seqwater Brisbane March 2026 PDF. Authority-level monthly data, not individual household tap testing."
+bris_m2026_008,Turbidity,,NTU,0.2,0.4,1.1,27,page 3,JG,2026-05-09,reviewed,"Checked against uploaded Seqwater Brisbane March 2026 PDF. Authority-level monthly data, not individual household tap testing."
+bris_m2026_009,Alkalinity Total,,mg/L,83.0,86.3,90.0,6,page 3,JG,2026-05-09,reviewed,"Checked against uploaded Seqwater Brisbane March 2026 PDF. Authority-level monthly data, not individual household tap testing."
+bris_m2026_010,Geosmin,,ng/L,<2.0,2.3,3.9,24,page 3,JG,2026-05-09,reviewed,"Checked against uploaded Seqwater Brisbane March 2026 PDF. Authority-level monthly data, not individual household tap testing."
+bris_m2026_011,2-Methylisoborneol / MIB,,ng/L,2.1,2.7,3.9,24,page 3,JG,2026-05-09,reviewed,"Checked against uploaded Seqwater Brisbane March 2026 PDF. Authority-level monthly data, not individual household tap testing."
